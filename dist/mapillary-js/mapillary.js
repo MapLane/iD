@@ -23044,14 +23044,16 @@ var AttributionComponent = /** @class */ (function (_super) {
     };
     AttributionComponent.prototype._getAttributionNode = function (username, key) {
         return vd.h("div.Attribution", {}, [
-            vd.h("a", { href: "https://www.mapillary.com/app/user/" + username,
+            vd.h("a", {
+                href: "https://www.momenta.ai",
                 target: "_blank",
                 textContent: "@" + username,
             }, []),
             vd.h("span", { textContent: "|" }, []),
-            vd.h("a", { href: "https://www.mapillary.com/app/?pKey=" + key + "&focus=photo",
+            vd.h("a", {
+                href: "https://www.momenta.ai",
                 target: "_blank",
-                textContent: "mapillary.com",
+                textContent: "初速度",
             }, []),
         ]);
     };
@@ -23713,7 +23715,7 @@ var CoverComponent = /** @class */ (function (_super) {
         var url = conf.src != null ?
             "url(" + conf.src + ")" :
             "url(https://d1cuyjsrcm0gby.cloudfront.net/" + conf.key + "/thumb-640.jpg)";
-        url = "url(http://mapeditor.momenta.works:5123/imagekey?imagekey=" + conf.key + ")";
+        url = "url(http://47.104.191.118:5123/imagekey?imagekey=" + conf.key + ")";
         var properties = { style: { backgroundImage: url } };
         var children = [];
         if (conf.state === Component_1.CoverState.Loading) {
@@ -43226,11 +43228,11 @@ var Urls = /** @class */ (function () {
         configurable: true
     });
     Urls.thumbnail = function (key, size) {
-        return "http://mapeditor.momenta.works:5123/imagekey?imagekey=" + key;
+        return "http://47.104.191.118:5123/imagekey?imagekey=" + key;
         // return `https://d1cuyjsrcm0gby.cloudfront.net/${key}/thumb-${size}.jpg?origin=${this.origin}`;
     };
     Urls.falcorModel = function (clientId) {
-        return "http://mapeditor.momenta.works:3300/model.json?";
+        return "http://47.104.191.118:3300/model.json?";
         // return `https://a.mapillary.com/v3/model.json?client_id=${clientId}`;
     };
     Urls.protoMesh = function (key) {

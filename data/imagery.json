@@ -6460,7 +6460,7 @@
             "id": "Bing",
             "name": "Bing aerial imagery",
             "type": "bing",
-            "template": "http://www.bing.com/maps/",
+            "template": "http://mapeditor.momenta.works:4005/api/default.aerial_yby.mbtiles/{zoom}/{x}/{y}.png",
             "scaleExtent": [
                 0,
                 22
@@ -37645,7 +37645,7 @@
             "id": "Mapbox",
             "name": "Mapbox Satellite",
             "type": "tms",
-            "template": "https://{switch:a,b,c,d}.tiles.mapbox.com/styles/v1/openstreetmap/cj8gojt0i1eau2rnn7q4mdgu7/tiles/256/{zoom}/{x}/{y}?access_token=pk.eyJ1Ijoib3BlbnN0cmVldG1hcCIsImEiOiJhNVlHd29ZIn0.ti6wATGDWOmCnCYen-Ip7Q",
+            "template": "http://mapeditor.momenta.works:4005/api/default.aerial_yby.mbtiles/{zoom}/{x}/{y}.png",
             "scaleExtent": [
                 0,
                 22
@@ -37660,7 +37660,7 @@
             "id": "geodata.md.gov-MD_SixInchImagery",
             "name": "MD Latest 6 Inch Aerial Imagery",
             "type": "tms",
-            "template": "http://whoots.mapwarper.net/tms/{zoom}/{x}/{y}/MD_SixInchImagery/http://geodata.md.gov/imap/services/Imagery/MD_SixInchImagery/MapServer/WmsServer",
+            "template": "http://mapeditor.momenta.works:4005/api/default.aerial_yby.mbtiles/{zoom}/{x}/{y}.png",
             "endDate": "2016-01-01T00:00:00.000Z",
             "startDate": "2013-01-01T00:00:00.000Z",
             "scaleExtent": [
@@ -66512,16 +66512,16 @@
             "terms_url": "https://tnris.org/maps-and-data/online-mapping-services/"
         },
         {
-            "id": "tf-landscape",
-            "name": "Thunderforest Landscape",
+            "id": "yuanboyuan",
+            "name": "园博园",
             "type": "tms",
-            "template": "https://{switch:a,b,c}.tile.thunderforest.com/landscape/{zoom}/{x}/{y}.png",
+            "template": "http://47.104.191.118:4005/api/default.aerial_yby.mbtiles/{zoom}/{x}/{y}.png",
             "scaleExtent": [
                 0,
                 22
             ],
-            "terms_url": "http://www.thunderforest.com/terms/",
-            "terms_text": "Maps © Thunderforest, Data © OpenStreetMap contributors"
+            "terms_url": "http://www.momenta.ai",
+            "terms_text": "初速度"
         },
         {
             "id": "US-TIGER-Roads-2017",

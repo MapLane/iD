@@ -409,7 +409,7 @@ export default {
 
 
     loadImages: function(projection) {
-        loadTiles('images', 'http://mapeditor.momenta.works:5123/' + 'images?', projection);
+        loadTiles('images', 'http://47.104.191.118:5123/' + 'images?', projection);
         // loadTiles('images', apibase + 'images?', projection);
         loadTiles('sequences', apibase + 'sequences?', projection);
     },
@@ -804,14 +804,14 @@ export default {
         loadDetection(imageKey);
 
         function loadDetection(detectionKey) {
-            var url = 'http://127.0.0.1:5123/' + 'detections/'+
+            var url = 'http://47.104.191.118:5123/' + 'detections/'+
                 detectionKey + '?' + utilQsString({
                     client_id: clientId,
                 });
             //url = 'http://127.0.0.1:5123/detection?imagekey=' + detectionKey;
 
             _forEach(tagArr, function(value, key){
-                url = 'http://mapeditor.momenta.works:5123/detection?imagekey=' + detectionKey + '&tag=json_' + key;
+                url = 'http://47.104.191.118:5123/detection?imagekey=' + detectionKey + '&tag=json_' + key;
                 d3_request(url)
                     .mimeType('application/json')
                     .response(function(xhr) {
