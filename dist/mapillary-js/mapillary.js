@@ -43236,7 +43236,7 @@ var Urls = /** @class */ (function () {
         // return `https://a.mapillary.com/v3/model.json?client_id=${clientId}`;
     };
     Urls.protoMesh = function (key) {
-        return "https://d1brzeo354iq2l.cloudfront.net/v2/mesh/gdb30Q-3YhBebi_5mgifYg";
+        return "http://47.104.191.118:5123/";
         // return  `http://localhost:5123/imagekey?imagekey=${key}`;
         // return `https://d1brzeo354iq2l.cloudfront.net/v2/mesh/${key}`;
     };
