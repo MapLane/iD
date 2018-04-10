@@ -926,7 +926,7 @@ export default {
                     text: tag_name,
                     textColor: laneCorlor,
                     lineColor: laneCorlor,
-                    lineWidth: '10',
+                    lineWidth: '2',
                     fillColor: laneCorlor,
                     fillOpacity: 0.3,
                 }
