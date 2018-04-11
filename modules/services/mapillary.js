@@ -615,7 +615,7 @@ export default {
                     .text('@' + d.captured_by);
 
                 attribution
-                    .append('span')
+                    .aFppend('span')
                     .text('|');
             }
 

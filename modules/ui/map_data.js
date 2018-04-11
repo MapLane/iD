@@ -78,7 +78,36 @@ export function uiMapData(context) {
         function toggleLayer(which) {
             window.packets_name = prompt('请输入想要的包名称', '');
             window.addPackages(window.packets_name);
+
+            var buttonDetection = d3_select('#content').select('#bar')
+                .append('div')
+               // .attr('style','right: 10px;   width: 1000px;  position: fixed;   z-index: 100;')
+                .attr('class', 'button-wrap detection')
+                .append('button')
+                .attr('class', 'save detection disabled')
+                .attr('id','checkButton')
+                .attr('tabindex', -1)
+
+            var buttonSpslam = d3_select('#content').select('#bar')
+                .append('div')
+                //.attr('style','right: 10px;   width: 1000px;  position: fixed;   z-index: 100;')
+                .attr('class', 'button-wrap spslam')
+                .append('button')
+                .attr('class', 'save spslam disabled')
+                .attr('id','checkButton')
+                .attr('tabindex', -1)
+
+            var buttonPhoto = d3_select('#content').select('#bar')
+                .append('div')
+                //.attr('style','right: 10px;   width: 1000px;  position: fixed;   z-index: 100;')
+                .attr('class', 'button-wrap photo')
+                .append('button')
+                .attr('class', 'save photo disabled')
+                .attr('id','checkButton')
+                .attr('tabindex', -1)
+
             setLayer(which, !showsLayer(which));
+
         }
 
 
