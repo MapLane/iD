@@ -89,9 +89,13 @@ export function svgMapillaryImages(projection, context, dispatch) {
         service
             .selectImage(d)
             .updateViewer(d.key, context)
-            .showViewer();
+            .showViewer()
+            .clearSubmit();
 
         context.map().centerEase(d.loc);
+        d3_select('#bar')
+            .select('.submit-feedback')
+            .on('click', service.submitCheckResult);
     }
 
 
@@ -208,6 +212,8 @@ export function svgMapillaryImages(projection, context, dispatch) {
                 return 'M 6,9 C 8,8.4 8,8.4 10,9 L 16,-2 C 12,-5 4,-5 0,-2 z';
             }
         }
+
+        service.updateChecks();
     }
 
 
