@@ -43,7 +43,8 @@ var apibase = 'http://mapeditor.momenta.works:5123/',
     _mlySignDefs,
     _mlySignSprite,
     _mlyViewer,
-    _mlyIntrinsicMatrixCache = {};
+    _mlyIntrinsicMatrixCache = {},
+    _checkedKeyCache =[];
 
 
 function abortRequest(i) {
@@ -432,7 +433,6 @@ export default {
         }
     },
 
-
     loadViewer: function(context) {
         // add mly-wrapper
         var wrap = d3_select('#photoviewer').selectAll('.mly-wrapper')
@@ -465,6 +465,8 @@ export default {
             .append('script')
             .attr('id', 'mapillary-viewerjs')
             .attr('src', context.asset(viewerjs));
+
+        // d3_select()
     },
 
 
@@ -695,6 +697,68 @@ export default {
         return this;
     },
 
+    clearSubmit: function() {
+        //清空checkboxk
+        var div = d3_select('#bar')
+            .select('.limiter')
+            .select('.button-wrap1');
+        div.selectAll('.human-check')
+            .property('checked', false);
+
+        div.select('.feedback-comment')
+            .property('value', '请输入备注');
+
+        return this;
+
+    },
+
+    submitCheckResult: function(d) {
+        _checkedKeyCache.push(_mlySelectedImage.key);
+
+        var div = d3_select('#bar')
+            .select('.limiter')
+            .select('.button-wrap1');
+        var photoResult = div.select('.photo')
+            .select('.photo-checkbox')
+            .property('checked');
+        var detectionResult = div.select('.detection')
+            .select('.detection-checkbox')
+            .property('checked');
+        var spslamResult = div.select('.spslam')
+            .select('.spslam-checkbox')
+            .property('checked');
+        var commentResult = div.select('.feedback-comment')
+            .property('value');
+        var url = apibase + 'checkresult';
+        var postData = 'image_key='+ _mlySelectedImage.key +
+            '&loc=' + _mlySelectedImage.loc +
+            '&packetName=' + _mlySelectedImage.captured_by + '-' + _mlySelectedImage.captured_at +
+            '&photoResult=' + Number(photoResult) +
+            '&detectionResult=' + Number(detectionResult) +
+            '&spslamResult=' + Number(spslamResult) +
+            '&commentResult=' + commentResult;
+
+        d3_request(url)
+            .header('Content-Type', 'application/x-www-form-urlencoded')
+            .response(function(xhr) {
+                return JSON.parse(xhr.responseText);
+            })
+            .post(postData, function(err, data) {
+                //if (!data || !data.propertites) return;
+                alert('提交成功');
+            })
+
+        d3_selectAll('.layer-mapillary-images .viewfield-group')
+            .classed('checked', function(d) {return _checkedKeyCache.indexOf(d.key) !== -1;} );
+
+        console.log(commentResult);
+        console.log(photoResult);
+    },
+
+    updateChecks: function (e) {
+        d3_selectAll('.layer-mapillary-images .viewfield-group')
+            .classed('checked', function(d) {return _checkedKeyCache.indexOf(d.key) !== -1;} );
+    },
 
     updateDetections: function(d) {
         if (!_mlyViewer) return;
@@ -811,7 +875,6 @@ export default {
 
         function loadIntrinsicMatrix(imageKey) {
             var url = apibase + 'detection?imagekey=' + imageKey + '&tag=IntrinsicMatrix';
-            console.log(url)
             d3_request(url)
                 .mimeType('application/json')
                 .response(function(xhr) {
@@ -1011,10 +1074,8 @@ export default {
                     return;
                 }
             }
-            console.log(points);
+
             points = AddDistortion(points, _mlyIntrinsicMatrixCache[packetName]);
-            console.log("after:");
-            console.log(points);
             points = points.map(function(value){
                 return [value[0]/imageWidth, value[1]/imageHeight];
             })

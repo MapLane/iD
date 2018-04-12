@@ -78,7 +78,64 @@ export function uiMapData(context) {
         function toggleLayer(which) {
             window.packets_name = prompt('请输入想要的包名称', '');
             window.addPackages(window.packets_name);
+            var div = d3_select('#content').select('#bar').select('.limiter')
+                .append('div')
+                .attr('class', 'button-wrap1')
+               // .attr('style','right: 1000px;   width: 1000px;  position: fixed;   z-index: 100;');
+
+
+            var divphoto = div.append('div')
+                .attr('class', 'photo');
+            divphoto.append('input')
+                .attr('type', 'checkbox')
+                .attr('class', 'human-check photo-checkbox');
+            divphoto.append('span')
+                .text('图片质量问题');
+                
+
+            var divDetection = div.append('div')
+                .attr('class', 'detection');
+            divDetection.append('input')
+                .attr('type', 'checkbox')
+                .attr('class', 'human-check detection-checkbox');
+            divDetection.append('span')
+                .text('检测算法问题');
+            
+            var divSpslam = div.append('div')
+                .attr('class', 'spslam');
+            divSpslam.append('input')
+                .attr('type', 'checkbox')
+                .attr('class', 'human-check spslam-checkbox');
+            divSpslam.append('span')
+                .text('建图算法问题');
+
+            var note = div.append('textarea')
+                .attr('class', 'feedback-comment')
+                .text('请输入备注');
+
+            var divSubmit = div.append('button')
+                .attr('class', 'submit-feedback')
+                .text('提交');
+                
+
+            // var buttonPhoto = div.append('button')
+            //     .attr('class', 'save photo disabled')
+            //     .attr('id','checkButton')
+            //     .attr('tabindex', -1);
+            //
+            // var buttonDetection = div.append('button')
+            //     .attr('class', 'save detection disabled')
+            //     .attr('id','checkButton')
+            //     .attr('tabindex', -1);
+            //
+            //
+            // var buttonSpslam = div.append('button')
+            //     .attr('class', 'save spslam disabled')
+            //     .attr('id','checkButton')
+            //     .attr('tabindex', -1);
+
             setLayer(which, !showsLayer(which));
+
         }
 
 
