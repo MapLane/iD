@@ -614,7 +614,7 @@ export default {
                     .attr('class', 'captured_by')
                     .attr('target', '_blank')
                     .attr('href', 'https://www.mapillary.com/app/user/' + encodeURIComponent(d.captured_by))
-                    .text(d.captured_by + '-' + d.captured_at);
+                    .text(d.captured_by);
 
                 attribution
                     .append('span')
@@ -625,7 +625,7 @@ export default {
                 attribution
                     .append('span')
                     .attr('class', 'captured_at')
-                    .text(localeTimestamp(d.captured_at));
+                    .text(d.captured_at);
 
                 attribution
                     .append('span')
@@ -636,7 +636,7 @@ export default {
                 .append('a')
                 .attr('class', 'image_link')
                 .attr('target', '_blank')
-                .attr('href', 'https://www.mapillary.com/app/?pKey=' + encodeURIComponent(d.key) +
+                .attr('href', 'https:w.mapillary.com/app/?pKey=' + encodeURIComponent(d.key) +
                     '&focus=photo&lat=' + d.loc[1] + '&lng=' + d.loc[0] + '&z=17')
                 .text(d.key);
 
