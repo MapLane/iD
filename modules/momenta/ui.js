@@ -26,9 +26,18 @@ function addHideSideBarKEY() {
         .call(keybinding);
 }
 function uploadOSM() {
+    let checkResult = {
+        'user_id': 'pavelliu',
+        'passwd': 'liushuming',
+        'task_id': window.momentaPool.currentPackage,
+        'task_type': 'check',
+        'audit_flag': '0'
+    }
     if (window.momentaPool && window.momentaPool.currentPackage){
-        sendPost(url.upload_package,{'packageIds':window.momentaPool.currentPackage},function (result) {
-            if (result==='success'){
+        sendPost(url.check_ok,checkResult,function (result) {
+            var x = 1;
+            console.log(result)
+            if (result.status===0){
                 alert('审核通过:'+window.momentaPool.currentPackage);
             } else {
                 alert('上传错误:'+window.momentaPool.currentPackage);
