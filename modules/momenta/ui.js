@@ -35,9 +35,9 @@ function uploadOSM() {
     }
     if (window.momentaPool && window.momentaPool.currentPackage){
         sendPost(url.check_ok,checkResult,function (result) {
-            var x = 1;
+            result = JSON.parse(result)
             console.log(result)
-            if (result.status===0){
+            if (result.status === 0){
                 alert('审核通过:'+window.momentaPool.currentPackage);
             } else {
                 alert('上传错误:'+window.momentaPool.currentPackage);
