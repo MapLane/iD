@@ -706,7 +706,7 @@ export default {
             .property('checked', false);
 
         div.select('.feedback-comment')
-            .property('value', '请输入备注');
+            .property('value', '');
 
         return this;
 
