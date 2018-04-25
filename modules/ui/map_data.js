@@ -111,7 +111,7 @@ export function uiMapData(context) {
 
             var note = div.append('textarea')
                 .attr('class', 'feedback-comment')
-                .text('请输入备注');
+                .text('');
 
             var divSubmit = div.append('button')
                 .attr('class', 'submit-feedback')

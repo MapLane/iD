@@ -732,7 +732,7 @@ export default {
         var url = apibase + 'checkresult';
         var postData = 'image_key='+ _mlySelectedImage.key +
             '&loc=' + _mlySelectedImage.loc +
-            '&packetName=' + _mlySelectedImage.captured_by + '-' + _mlySelectedImage.captured_at +
+            '&packetName=' + _mlySelectedImage.captured_by  +
             '&photoResult=' + Number(photoResult) +
             '&detectionResult=' + Number(detectionResult) +
             '&spslamResult=' + Number(spslamResult) +
