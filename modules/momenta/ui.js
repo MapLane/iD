@@ -25,10 +25,19 @@ function addHideSideBarKEY() {
     d3_select(document)
         .call(keybinding);
 }
-function uploadOSM() {
+function uploadOSM(judgeResult) {
+    let checkResult = {
+        'user_id': 'pavelliu',
+        'passwd': 'liushuming',
+        'task_id': window.momentaPool.currentPackage,
+        'task_type': 'check',
+        'audit_flag': judgeResult.result
+    }
     if (window.momentaPool && window.momentaPool.currentPackage){
-        sendPost(url.upload_package,{'packageIds':window.momentaPool.currentPackage},function (result) {
-            if (result==='success'){
+        sendPost(url.check_ok,checkResult,function (result) {
+            result = JSON.parse(result)
+            console.log(result)
+            if (result.status === 0){
                 alert('审核通过:'+window.momentaPool.currentPackage);
             } else {
                 alert('上传错误:'+window.momentaPool.currentPackage);
@@ -40,21 +49,23 @@ function uploadOSM() {
 
 function createPassButton() {
     var select = window.id.container().select('#bar');
-    var button = select
+    let dataSet = [{name: 'OK', 'result': 0}, {name:'NG', 'result':1}];
+    var div = select
         .append('div')
         .attr('style','right: 10px;   width: 100px;  position: fixed;   z-index: 100;')
-        .attr('class', 'button-wrap col1')
+        .attr('class', 'button-wrap col1');
+    var text = div.selectAll('text')
+        .data(dataSet)
+        .enter()
         .append('button')
-        .attr('class', 'save col12 disabled')
-        .attr('id','checkButton')
+        // .attr('id','checkPass')
         .attr('tabindex', -1)
-        .on('click',uploadOSM);
-
-    button
-        .call(svgIcon('#icon-save', 'pre-text'))
+        .attr('style', 'width: 50px')
+        .on('click', uploadOSM)
         .append('span')
         .attr('class', 'label')
-        .text('审核通过');
+        .text(function(d,i){return d.name;});
+
     function changeButtonState() {
         var select = window.id.container().select('#checkButton');
         if (window.momentaPool && window.momentaPool.currentPackage){
