@@ -341,6 +341,10 @@ function actionGetLocation(selectIds, context) {
                 var loc = ele.loc;
                 alert(loc[0]+','+loc[1]);
             }
+            if (ele.type === 'way'){
+                var id = ele.id;
+                alert(id.substr(1));
+            }
         });
 
 
@@ -491,6 +495,25 @@ function addMomentaPackages(packageId) {
     // },10);
 }
 
+window.showLines = function (jsonobject) {
+    sendPost(url.showLines,{'jsonObject':jsonobject},function (result) {
+        result = JSON.parse(result);
+        if (result.center){
+            var center = result.center;
+            window.id.map().center(center);
+            window.id.map().zoom(18);
+        }
+        var createEles = result.created;
+        for (var i=0; i<createEles.length; i+=10){
+            var eles = createEles.slice(i,i+10);
+            setTimeout(function (eles) {
+                return function () {
+                    window.id.perform(addPackage(eles), 'addMomentaPackages');
+                };
+            }(eles),100);
+        }
+    });
+}
 function focusOnFrames(frameId) {
     // window.id.map().center([116.35815,39.82925]);
     // window.id.map().zoom(18);

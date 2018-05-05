@@ -5,6 +5,8 @@ url.createSeg = 'createLineSeg';
 
 url.check_host='http://10.2.135.59:1123';
 
+url.showLines='http://10.2.135.59:1123/show';
+
 url.upload_package = 'http://10.2.135.59:1123/upload';
 
 url.check_ok = 'http://10.2.149.54:23200/manage_task/submit_task'

@@ -47,6 +47,27 @@ var dispatch = d3_dispatch('authLoading', 'authDone', 'change', 'loading', 'load
 
 //8100
 
+    // urlroot = 'http://10.2.135.59:8100',
+    // oauth = osmAuth({
+    //     url: urlroot,
+    //     oauth_consumer_key: 'YWo7xq7ImX8ti3J3iqfhd3TivDPWuvHNuorj8wxE',
+    //     oauth_secret: '0c061HIOuZR15pmZjhIWikmFfg6InQo1nWOUG7DO',
+    //     loading: authLoading,
+    //     done: authDone
+    // }),
+
+
+    //
+    // urlroot = 'http://10.2.135.59:8400',
+    // oauth = osmAuth({
+    //     url: urlroot,
+    //     oauth_consumer_key: 'K6CBqGgZi1F6EIbqYddblFDTjbJsdso3DQzOUv3s',
+    //     oauth_secret: 'ozPXTsOdiEJ7cwiWI32phIEteQBD7wsDezM3pykk',
+    //     loading: authLoading,
+    //     done: authDone
+    // }),
+
+
     urlroot = 'http://10.2.135.59:8100',
     oauth = osmAuth({
         url: urlroot,
