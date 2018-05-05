@@ -778,7 +778,8 @@ export default {
                     photoResult: Number(photoResult),
                     detectionResult: Number(detectionResult),
                     spslamResul: Number(spslamResult),
-                    commentResult: commentResult
+                    commentResult: commentResult,
+                    loc: _mlySelectedImage.loc
                 };
 
                 d3_selectAll('.layer-mapillary-images .viewfield-group')
