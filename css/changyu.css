@@ -11,6 +11,21 @@
     position: absolute;
 }
 
+#bar .button-wrap1 .pre-btn {
+    position: absolute;
+    left: 415px;
+    width: 50px;
+    height: 18px;
+}
+
+#bar .button-wrap1 .next-btn {
+    position: absolute;
+    left: 415px;
+    top: 21px;
+    width: 50px;
+    height: 18px;
+}
+
 #bar .button-wrap1 .photo {
     left: 10px;
     top: -10px;

@@ -29,7 +29,6 @@ import { utilDetect } from '../util/detect';
 import { utilQsString, utilRebind } from '../util';
 import { AddDistortion } from './distort';
 
-
 var apibase = 'http://mapeditor.momenta.works:5123/',
     viewercss = 'mapillary-js/mapillary.min.css',
     viewerjs = 'mapillary-js/mapillary.min.js',
@@ -44,9 +43,12 @@ var apibase = 'http://mapeditor.momenta.works:5123/',
     _mlySignSprite,
     _mlyViewer,
     _mlyIntrinsicMatrixCache = {},
-    _checkedKeyCache =[];
+    _checkedKeyCache ={};
 
-
+/**
+ * 请求中断
+ * @param i
+ */
 function abortRequest(i) {
     i.abort();
 }
@@ -685,10 +687,12 @@ export default {
         // highlight sibling viewfields on either the selected or the hovered sequences
         var highlightedImageKeys = _union(hoveredImageKeys, selectedImageKeys);
 
+
         d3_selectAll('.layer-mapillary-images .viewfield-group')
             .classed('highlighted', function(d) { return highlightedImageKeys.indexOf(d.key) !== -1; })
             .classed('hovered', function(d) { return d.key === hoveredImageKey; })
-            .classed('selected', function(d) { return d.key === selectedImageKey; });
+            .classed('selected', function(d) { return d.key === selectedImageKey; })
+            .classed('checked', function(d) { return _checkedKeyCache.hasOwnProperty(d.key) === true;} );
 
         d3_selectAll('.layer-mapillary-images .sequence')
             .classed('highlighted', function(d) { return d.properties.key === hoveredSequenceKey; })
@@ -712,8 +716,28 @@ export default {
 
     },
 
+    getCheckResults: function(packageId) {
+        var url = apibase + 'checkresult/' + packageId;
+        d3_request(url)
+            .mimeType('application/json')
+            .response(function(xhr) {
+                return JSON.parse(xhr.responseText);
+            })
+            .get(function(err, data) {
+                console.log(data);
+                if(!err && !!data) {
+                    _checkedKeyCache = data;
+                    // object is empty？ if not，enable the next button.
+                    if(Object.keys(_checkedKeyCache).length > 0) {
+                        d3_select('.next-btn')
+                            .classed('disabled', false);
+                    }
+                }
+            });
+    },
+
     submitCheckResult: function(d) {
-        _checkedKeyCache.push(_mlySelectedImage.key);
+
 
         var div = d3_select('#bar')
             .select('.limiter')
@@ -745,20 +769,65 @@ export default {
             })
             .post(postData, function(err, data) {
                 //if (!data || !data.propertites) return;
+                if(err) {
+                    alert('提交失败')
+                }
                 alert('提交成功');
-            })
+                _checkedKeyCache[_mlySelectedImage.key] = {
+                    key: _mlySelectedImage.key,
+                    photoResult: Number(photoResult),
+                    detectionResult: Number(detectionResult),
+                    spslamResul: Number(spslamResult),
+                    commentResult: commentResult
+                };
 
-        d3_selectAll('.layer-mapillary-images .viewfield-group')
-            .classed('checked', function(d) {return _checkedKeyCache.indexOf(d.key) !== -1;} );
+                d3_selectAll('.layer-mapillary-images .viewfield-group')
+                    .classed('checked', function(d) {return _checkedKeyCache.hasOwnProperty(d.key) === true;} );
+            });
+
+
 
         console.log(commentResult);
         console.log(photoResult);
     },
 
-    updateChecks: function (e) {
+    updateChecks: function () {
         d3_selectAll('.layer-mapillary-images .viewfield-group')
-            .classed('checked', function(d) {return _checkedKeyCache.indexOf(d.key) !== -1;} );
+            .classed('checked', function(d) {return _checkedKeyCache.hasOwnProperty(d.key) === true;} );
     },
+
+    matchCheck: function(d) {
+        if(_checkedKeyCache.hasOwnProperty(d.key) === true) {
+            var checkItem = _checkedKeyCache[d.key];
+            var div = d3_select('#bar')
+                .select('.limiter')
+                .select('.button-wrap1');
+            if(Number(checkItem.spslamResult) === 1 ) {
+                var photoResult = div.select('.photo')
+                    .select('.photo-checkbox')
+                    .property('checked', true)
+                    .attr('checked', true);
+            }
+            if(Number(checkItem.photoResult) === 1) {
+                var detectionResult = div.select('.detection')
+                    .select('.detection-checkbox')
+                    .property('checked', true)
+                    .attr('checked', true);
+            }
+            if(Number(checkItem.spslamResult) === 1) {
+                var spslamResult = div.select('.spslam')
+                    .select('.spslam-checkbox')
+                    .property('checked', true)
+                    .attr('checked', true);
+            }
+
+            var commentResult = div.select('.feedback-comment')
+                .property('value', checkItem.commentResult)
+                .text(checkItem.commentResult);
+        }
+    },
+
+
 
     updateDetections: function(d) {
         if (!_mlyViewer) return;
@@ -1105,6 +1174,13 @@ export default {
         return _mlyCache;
     },
 
+    checkedKeyCache: function() {
+        return _checkedKeyCache;
+    },
+
+    setCheckedKeyCache: function(checkResults) {
+        _checkedKeyCache = checkResults;
+    },
 
     signDefs: function(_) {
         if (!arguments.length) return _mlySignDefs;

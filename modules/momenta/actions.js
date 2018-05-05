@@ -6,6 +6,7 @@ import {url} from './url';
 import {actionAddEntity,actionDeleteNode,actionDeleteWay,actionCopyEntities} from '../actions';
 import {osmNode,osmWay,osmRelation} from '../osm';
 import {} from './ui';
+import { services } from '../services';
 
 function createEntity(ele,type){
     if (ele.type==='node'||type === 'node'||(ele.tags!=null && ele.tags.tableInfo==='poles'|| ele.tags.tableInfo==='boards')){
@@ -457,6 +458,7 @@ function addMomentaPackages(packageId) {
     }
     window.momentaPool['currentPackage']=packageId;
     window.momentaPool.changeButtonState();
+
     sendPost(url.check_host,{'packageIds':packageId},function (result) {
         result = JSON.parse(result);
         if (result.center){
@@ -471,6 +473,9 @@ function addMomentaPackages(packageId) {
             window.id.map().center([parseFloat(splitss[0]),parseFloat(splitss[1])]);
             window.id.map().zoom(18);
         });
+
+        services.mapillary.getCheckResults(packageId);
+
         var createEles = result.created;
         for (var i=0; i<createEles.length; i+=10){
             var eles = createEles.slice(i,i+10);

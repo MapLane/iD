@@ -82,9 +82,64 @@ export function svgMapillaryImages(projection, context, dispatch) {
     }
 
 
+    function isFirstCheck(key) {
+        // get first key in service.checkedKeyCache()
+        // then campare first key with current key
+        // if equal, disable the pre-btn; else, enable the pre-btn
+        var service = getService();
+        if (!service) return;
+
+        var checkedKeyCache = service.checkedKeyCache();
+        var checkedKeyArray = Object.keys(checkedKeyCache);
+        if(checkedKeyArray[0] === key.toString()){
+            d3_select('.pre-btn')
+                .classed('disabled', true);
+        } else {
+            d3_select('.pre-btn')
+                .classed('disabled', false);
+        }
+    }
+
+    function isLastCheck(key) {
+        // get last key in service.checkedKeyCache()
+        // then campare last key with current key
+        // if equal, disable the next-btn; else, enable the next-btn
+        var service = getService();
+        if (!service) return;
+
+        var checkedKeyCache = service.checkedKeyCache();
+        var checkedKeyArray = Object.keys(checkedKeyCache);
+        if(checkedKeyArray[checkedKeyArray.length - 1] === key.toString()){
+            d3_select('.next-btn')
+                .classed('disabled', true);
+        } else {
+            d3_select('.next-btn')
+                .classed('disabled', false);
+        }
+    }
+
     function click(d) {
         var service = getService();
         if (!service) return;
+
+        // if d exist in service.checkedKeyCache(), call isFirstCheck and isLastCheck
+        // else, back to initial state
+        var checkedKeyCache = service.checkedKeyCache();
+        var checkedKeyArray = Object.keys(checkedKeyCache);
+        if(checkedKeyArray.indexOf(d.key.toString()) !== -1) {
+            isFirstCheck(d.key);
+            isLastCheck(d.key);
+        } else if(checkedKeyArray.length > 0){
+            d3_select('.pre-btn')
+                .classed('disabled', true);
+            d3_select('.next-btn')
+                .classed('disabled', false);
+        } else {
+            d3_select('.pre-btn')
+                .classed('disabled', true);
+            d3_select('.next-btn')
+                .classed('disabled', true);
+        }
 
         service
             .selectImage(d)
@@ -96,8 +151,98 @@ export function svgMapillaryImages(projection, context, dispatch) {
         d3_select('#bar')
             .select('.submit-feedback')
             .on('click', service.submitCheckResult);
+
+        service.matchCheck(d);
     }
 
+
+    // get pre broken image
+    // first, get index of current image
+    // next, newIndex = index - 1
+    // then, if newIndex unexist, alert not found, return, end.
+    //       else get the key of pre broken image and get image
+    // finally, fire click event
+    function getPreCheck() {
+        var service = getService();
+        if (!service) return;
+        var _checkedKeyCache = service.checkedKeyCache();
+        var selectedImage = service.getSelectedImage();
+        var key = selectedImage ? selectedImage.key : null;
+
+        var checkKeySize = Object.keys(_checkedKeyCache).length;
+        if(checkKeySize === 0 ) {
+            alert('没有更多了');
+            return;
+        } else if(key && checkKeySize === 1){
+            alert('只有一个点');
+            return;
+        }
+
+        var keyArray = Object.keys(_checkedKeyCache);
+        var index, newIndex;
+        if(!!key) {
+            index = keyArray.indexOf(key.toString());
+
+            newIndex = index - 1;
+        } else {
+            return;
+        }
+
+        if(key && index === 0){
+            // alert('已经是第一个了');
+            return;
+        }
+
+        context.map().centerZoom(_checkedKeyCache[keyArray[newIndex]].loc, 18);
+
+        setTimeout(function() {
+            d = service.cache().images.forImageKey[parseInt(keyArray[newIndex])];
+            click(d);
+        }, 300);
+    }
+
+
+    // get next broken image
+    function getNextCheck() {
+        var service = getService();
+        if (!service) return;
+        var _checkedKeyCache = service.checkedKeyCache();
+        var selectedImage = service.getSelectedImage();
+        var key = selectedImage ? selectedImage.key : null;
+
+        var checkKeySize = Object.keys(_checkedKeyCache).length;
+        if(checkKeySize === 0 ) {
+            alert('没有更多了');
+            return;
+        } else if(key && checkKeySize === 1){
+            alert('只有一处问题点');
+            return;
+        }
+
+        var keyArray = Object.keys(_checkedKeyCache);
+        var index, newIndex;
+
+        if(!!key) {
+            index = keyArray.indexOf(key.toString());
+
+            newIndex = index + 1;
+        } else {
+            index = -1;
+            newIndex = 0;
+        }
+
+        if(key && index === checkKeySize - 1) {
+            alert('已经是最后一个了');
+            return;
+        }
+
+        context.map().centerZoom(_checkedKeyCache[keyArray[newIndex]].loc, 18);
+
+        setTimeout(function() {
+            d = service.cache().images.forImageKey[parseInt(keyArray[newIndex])];
+            click(d);
+        }, 300);
+    }
 
     function mouseover(d) {
         var service = getService();
@@ -191,6 +336,16 @@ export function svgMapillaryImages(projection, context, dispatch) {
             .attr('dx', '0')
             .attr('dy', '0')
             .attr('r', '6');
+
+        // bind pre broken image event
+        d3_select('#bar')
+            .select('.pre-btn')
+            .on('click', getPreCheck);
+
+        // bind next broken image event
+        d3_select('#bar')
+            .select('.next-btn')
+            .on('click', getNextCheck);
 
         var viewfields = markers.selectAll('.viewfield')
             .data(showViewfields ? [0] : []);

@@ -10,7 +10,6 @@ import { svgIcon } from '../svg';
 import { uiTooltipHtml } from './tooltipHtml';
 import { tooltip } from '../util/tooltip';
 
-
 export function uiMapData(context) {
     var key = t('map_data.key'),
         features = context.features().keys(),
@@ -116,7 +115,14 @@ export function uiMapData(context) {
             var divSubmit = div.append('button')
                 .attr('class', 'submit-feedback')
                 .text('提交');
-                
+
+            var divPre = div.append('button')
+                .attr('class', 'pre-btn disabled')
+                .text('上一个');
+
+            var divAfter = div.append('button')
+                .attr('class', 'next-btn disabled')
+                .text('下一个');
 
             // var buttonPhoto = div.append('button')
             //     .attr('class', 'save photo disabled')
