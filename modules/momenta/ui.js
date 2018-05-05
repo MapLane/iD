@@ -26,7 +26,7 @@ function addHideSideBarKEY() {
         .call(keybinding);
 }
 function uploadOSM(judgeResult) {
-    let checkResult = {
+    var checkResult = {
         'user_id': 'pavelliu',
         'passwd': 'liushuming',
         'task_id': window.momentaPool.currentPackage,
@@ -49,7 +49,7 @@ function uploadOSM(judgeResult) {
 
 function createPassButton() {
     var select = window.id.container().select('#bar');
-    let dataSet = [{name: 'OK', 'result': 0}, {name:'NG', 'result':1}];
+    var dataSet = [{name: 'OK', 'result': 0}, {name:'NG', 'result':1}];
     var div = select
         .append('div')
         .attr('style','right: 10px;   width: 100px;  position: fixed;   z-index: 100;')
