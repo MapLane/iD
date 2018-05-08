@@ -59,6 +59,11 @@ en:
         description: addStopLine.
         key: L
         annotation: addStopLine.
+    momenta_show_muti_seg:
+            title: showSegs
+            description: showSegs.
+            key: L
+            annotation: showSegs.
     momenta_straighten:
             title: Straighten
             description: Straighten this line.

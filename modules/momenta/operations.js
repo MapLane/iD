@@ -3,7 +3,7 @@
 import { t } from '../util/locale';
 import { behaviorOperation } from '../behavior/index';
 import {createLineSegment,deleteLines,actionFillInfo,actionMerge,actionMomentaStraighten
-,actionConvertLineType,actionAddStopLine,actionGetLocation
+,actionConvertLineType,actionAddStopLine,actionGetLocation,showMutiSegs
 ,actionConvertDirection
 ,createAddMorePoints} from '../momenta/actions';
 import {operationDelete} from '../operations';
@@ -163,6 +163,63 @@ function operationMomentaCreateSegment(selectedIDs, context) {
 
     return operation;
 }
+
+
+function operationMomentaShowMutiSegs(selectedIDs, context) {
+    var  action = showMutiSegs(selectedIDs, context);
+    // let message = convert2JSON(selectedIDs,context);
+    // console.log(message);
+    function checkAllLinehasEle(selectedIDs, context) {
+        var noEle = false;
+        selectedIDs.forEach(function (item, i) {
+            var entity1 = context.entity(item);
+            if (entity1.type === 'way') {
+                var nodes = entity1.nodes;
+                nodes.forEach(function (item2, index) {
+                    if (context.entity(item2).tags.ele==null){
+                        noEle = true;
+                    }
+                });
+            }
+        })
+        return !noEle;
+    }
+    var operation = function() {
+        context.perform(action, operation.annotation());
+    };
+
+    operation.available = function() {
+        return true;
+    };
+
+
+    operation.disabled = function() {
+        var reason;
+        if (!checkAllLinehasEle(selectedIDs,context)){
+            reason = t('operations.momenta_show_muti_seg.reason');
+        }
+        return reason;
+    };
+
+
+    operation.tooltip = function() {
+        return t('operations.momenta_show_muti_seg.description');
+    };
+
+
+    operation.annotation = function() {
+        return t('operations.momenta_show_muti_seg.annotation');
+    };
+
+
+    operation.id = 'momenta_show_muti_seg';
+    operation.keys = [t('operations.momenta_show_muti_seg.key')];
+    operation.title = t('operations.momenta_show_muti_seg.title');
+    operation.behavior = behaviorOperation(context).which(operation);
+
+    return operation;
+}
+
 
 function operationMomentaFillInfo(selectedIDs, context) {
     var  action = actionFillInfo(selectedIDs, context);
@@ -518,4 +575,5 @@ function operationMomentaAddStopLine(selectedIDs, context) {
 }
 export {operationMomentaCreateSegment,operationMomentaDelete,operationMomentaFillInfo,operationMomentaConvertDirection,operationMomentaMerge,
     operationMomentaAddStopLine,operationMomentaGetLocation
-    ,operationMomentaConvertLineType,operationMomentaStraighten,operationMomentaAddPoints};
+    ,operationMomentaConvertLineType,operationMomentaStraighten,operationMomentaAddPoints
+,operationMomentaShowMutiSegs};

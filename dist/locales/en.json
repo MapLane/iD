@@ -77,6 +77,12 @@
                 "key": "L",
                 "annotation": "addStopLine."
             },
+            "momenta_show_muti_seg": {
+                "title": "showSegs",
+                "description": "showSegs.",
+                "key": "L",
+                "annotation": "showSegs."
+            },
             "momenta_straighten": {
                 "title": "Straighten",
                 "description": "Straighten this line.",
@@ -101,6 +107,13 @@
                 "key": "F",
                 "annotation": "adapte ele.",
                 "title": "add ele to nodes."
+            },
+            "momenta_location": {
+                "reason": "obtain location.",
+                "tooltip": "get location of the point.",
+                "key": "F",
+                "annotation": "obtain location.",
+                "title": "obtain location."
             },
             "momenta_segment": {
                 "title": "create line segment",
@@ -7215,6 +7228,13 @@
                 "description": "Esri world imagery.",
                 "name": "Esri World Imagery"
             },
+            "EsriWorldImageryClarity": {
+                "attribution": {
+                    "text": "Terms & Feedback"
+                },
+                "description": "Esri archive imagery that may be clearer and more accurate than the default layer.",
+                "name": "Esri World Imagery (Clarity) Beta"
+            },
             "MAPNIK": {
                 "attribution": {
                     "text": "© OpenStreetMap contributors, CC-BY-SA"
@@ -7284,31 +7304,31 @@
             },
             "Waymarked_Trails-Cycling": {
                 "attribution": {
-                    "text": "© Sarah Hoffmann, CC by-SA 3.0, map data OpenStreetMap contributors, ODbL 1.0"
+                    "text": "© waymarkedtrails.org, OpenStreetMap contributors, CC by-SA 3.0"
                 },
                 "name": "Waymarked Trails: Cycling"
             },
             "Waymarked_Trails-Hiking": {
                 "attribution": {
-                    "text": "© Sarah Hoffmann, CC by-SA 3.0, map data OpenStreetMap contributors, ODbL 1.0"
+                    "text": "© waymarkedtrails.org, OpenStreetMap contributors, CC by-SA 3.0"
                 },
                 "name": "Waymarked Trails: Hiking"
             },
             "Waymarked_Trails-MTB": {
                 "attribution": {
-                    "text": "© Sarah Hoffmann, CC by-SA 3.0, map data OpenStreetMap contributors, ODbL 1.0"
+                    "text": "© waymarkedtrails.org, OpenStreetMap contributors, CC by-SA 3.0"
                 },
                 "name": "Waymarked Trails: MTB"
             },
             "Waymarked_Trails-Skating": {
                 "attribution": {
-                    "text": "© Sarah Hoffmann, CC by-SA 3.0, map data OpenStreetMap contributors, ODbL 1.0"
+                    "text": "© waymarkedtrails.org, OpenStreetMap contributors, CC by-SA 3.0"
                 },
                 "name": "Waymarked Trails: Skating"
             },
             "Waymarked_Trails-Winter_Sports": {
                 "attribution": {
-                    "text": "© Michael Spreng, CC by-SA 3.0, map data OpenStreetMap contributors, ODbL 1.0"
+                    "text": "© waymarkedtrails.org, OpenStreetMap contributors, CC by-SA 3.0"
                 },
                 "name": "Waymarked Trails: Winter Sports"
             },
