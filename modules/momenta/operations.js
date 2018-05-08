@@ -195,9 +195,6 @@ function operationMomentaShowMutiSegs(selectedIDs, context) {
 
     operation.disabled = function() {
         var reason;
-        if (!checkAllLinehasEle(selectedIDs,context)){
-            reason = t('operations.momenta_show_muti_seg.reason');
-        }
         return reason;
     };
 

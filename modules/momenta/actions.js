@@ -356,7 +356,7 @@ function actionGetLocation(selectIds, context) {
 function showMutiSegs(selectIds, context) {
     var data = convert2JSON(selectIds,context);
     return function createAdd(graph) {
-        var result = sendPost(url.host+url.createSeg,{value:data,type:'addpoints'});
+        var result = sendPost(url.host+url.createSeg,{value:data,type:'showSegs'});
         result = JSON.parse(result);
         var deleteEles = result.deleted;
         var createEles = result.created;

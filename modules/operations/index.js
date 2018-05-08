@@ -6,6 +6,7 @@ export { operationMerge } from './merge';
 // export { operationMomentaCreateSegment } from './calculate_segments';
 export {operationMomentaDelete,operationMomentaCreateSegment,operationMomentaFillInfo//,operationMomentaMerge
 ,operationMomentaConvertDirection,operationMomentaConvertLineType,operationMomentaAddStopLine,
+    operationMomentaShowMutiSegs,
     operationMomentaGetLocation
 ,operationMomentaStraighten,operationMomentaAddPoints} from '../momenta/operations';
 export { operationMove } from './move';
