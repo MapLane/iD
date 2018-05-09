@@ -24,7 +24,7 @@ export function modeAddArea(context) {
             .on('start', start)
             .on('startFromWay', startFromWay)
             .on('startFromNode', startFromNode),
-        defaultTags = { area: 'yes' };
+        defaultTags = { area: 'yes', rebuld: 'yes' };
 
 
     function actionClose(wayId) {
