@@ -562,7 +562,16 @@ window.showLines = function (jsonobject) {
             }(eles),100);
         }
     });
-}
+};
+window.brokeWay = function (way_id) {
+    sendPost(url.brokeWay+way_id,{},function (result) {
+        result = JSON.parse(result);
+        console.log(result);
+        if(result.result_lines.length>0) {
+            window.showLines(result);
+        }
+    });
+};
 function focusOnFrames(frameId) {
     // window.id.map().center([116.35815,39.82925]);
     // window.id.map().zoom(18);
