@@ -585,7 +585,7 @@ window.brokeWayCmd = function (way_id,zoom=true) {
         var resultObj = JSON.parse(result);
         console.log('step_count:'+ resultObj.step_count);
         if (resultObj && resultObj.json_lanes.result_lines && resultObj.json_lanes.result_lines.length>0) {
-            window.showLines(result,zoom);
+            window.showLines(JSON.stringify(resultObj.json_lanes),zoom);
         } else {
             alert('no broke line');
         }
