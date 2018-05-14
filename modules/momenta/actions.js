@@ -127,6 +127,14 @@ function createLineSegment(selectIds,context) {
     };
 }
 
+function brokeWay(selectIds,context) {
+    var way_id = selectIds[0].substring(1);
+    return function brokeWayAction(graph) {
+        window.brokeWayCmd(way_id,false);
+        return graph;
+    };
+}
+
 function createAddMorePoints(selectIds,context) {
     var data = convert2JSON(selectIds,context);
     return function createAdd(graph) {
@@ -544,13 +552,15 @@ function addMomentaPackages(packageId) {
     // },10);
 }
 
-window.showLines = function (jsonobject) {
+window.showLines = function (jsonobject, zoom=true) {
     sendPost(url.showLines,{'jsonObject':jsonobject},function (result) {
         result = JSON.parse(result);
         if (result.center){
             var center = result.center;
             window.id.map().center(center);
-            window.id.map().zoom(18);
+            if (zoom) {
+                window.id.map().zoom(18);
+            }
         }
         var createEles = result.created;
         for (var i=0; i<createEles.length; i+=10){
@@ -563,15 +573,17 @@ window.showLines = function (jsonobject) {
         }
     });
 };
-window.brokeWay = function (way_id) {
+window.brokeWayCmd = function (way_id,zoom=true) {
     sendPost(url.brokeWay+way_id,{},function (result) {
-        result = JSON.parse(result);
-        console.log(result);
-        if(result.result_lines.length>0) {
-            window.showLines(result);
+        var resultObj = JSON.parse(result);
+        console.log(resultObj);
+        if (resultObj.result_lines && resultObj.result_lines.length>0) {
+            window.showLines(result,zoom);
+        } else {
+            alert('no broke line');
         }
     });
-};
+}
 function focusOnFrames(frameId) {
     // window.id.map().center([116.35815,39.82925]);
     // window.id.map().zoom(18);
@@ -587,4 +599,4 @@ function focusOnFrames(frameId) {
 }
 window.focusOnFrames = focusOnFrames;
 window.addPackages = addMomentaPackages;
-export {createLineSegment,actionAddStopLine,showMutiSegs,actionGetLocation,deleteLines,actionFillInfo,actionMerge,actionMomentaStraighten,createAddMorePoints,actionConvertDirection,actionConvertLineType,addMomentaPackages};
+export {createLineSegment,brokeWay,actionAddStopLine,showMutiSegs,actionGetLocation,deleteLines,actionFillInfo,actionMerge,actionMomentaStraighten,createAddMorePoints,actionConvertDirection,actionConvertLineType,addMomentaPackages};

@@ -97,6 +97,12 @@ en:
           description: create line segment
           key: S
           annotation: generate Segment of selected line
+    momenta_broke_way:
+          reason: way_id error
+          title: broke_way
+          description: produce broke line
+          key: B
+          annotation: generate broke line of selected way
     continue:
       key: A
       title: Continue
