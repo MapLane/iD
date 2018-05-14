@@ -575,6 +575,7 @@ window.showLines = function (jsonobject, zoom=true) {
 };
 window.brokeWayCmd = function (way_id,zoom=true) {
     sendPost(url.brokeWay+way_id,{},function (result) {
+        window.current_step = 0;
         var resultObj = JSON.parse(result);
         console.log(resultObj);
         if (resultObj.result_lines && resultObj.result_lines.length>0) {
@@ -583,7 +584,22 @@ window.brokeWayCmd = function (way_id,zoom=true) {
             alert('no broke line');
         }
     });
-}
+};
+window.step = function (step) {
+    window.current_step = step;
+    window.showStepView(window.current_step,window.current_view);
+};
+window.view = function (view) {
+    window.current_view = view;
+    window.showStepView(window.current_step,window.current_view);
+};
+window.showStepView = function (step,view) {
+    sendPost(url.showStepView+step+'/'+view,{},function (result) {
+        if (result && result.length>0){
+            window.showLines(result,false);
+        }
+    });
+};
 function focusOnFrames(frameId) {
     // window.id.map().center([116.35815,39.82925]);
     // window.id.map().zoom(18);
