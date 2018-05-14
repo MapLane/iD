@@ -553,7 +553,8 @@ function addMomentaPackages(packageId) {
 }
 
 
-window.showLines = function (jsonobject, zoom=true) {
+window.showLines = function (jsonobject, zoom) {
+    if (undefined === zoom) {zoom = true;}
     while (window.id.undo().length()>0){
         window.id.undo();
         window.id.history().undoAnnotation();
@@ -578,7 +579,8 @@ window.showLines = function (jsonobject, zoom=true) {
         }
     });
 };
-window.brokeWayCmd = function (way_id,zoom=true) {
+window.brokeWayCmd = function (way_id,zoom) {
+    if (undefined === zoom) {zoom = true;}
     sendPost(url.brokeWay+way_id,{},function (result) {
         window.current_step = 0;
         window.current_view ='main_way';
