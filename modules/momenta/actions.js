@@ -552,7 +552,12 @@ function addMomentaPackages(packageId) {
     // },10);
 }
 
-window.showLines = function (jsonobject, zoom=true) {
+
+window.showLines = function (jsonobject) {
+    while (window.id.undo().length()>0){
+        window.id.undo();
+        window.id.history().undoAnnotation();
+    }
     sendPost(url.showLines,{'jsonObject':jsonobject},function (result) {
         result = JSON.parse(result);
         if (result.center){

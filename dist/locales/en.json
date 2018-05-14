@@ -80,7 +80,7 @@
             "momenta_show_muti_seg": {
                 "title": "showSegs",
                 "description": "showSegs.",
-                "key": "L",
+                "key": "Q",
                 "annotation": "showSegs."
             },
             "momenta_straighten": {
