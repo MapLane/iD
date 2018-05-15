@@ -127,6 +127,14 @@ function createLineSegment(selectIds,context) {
     };
 }
 
+function brokeWay(selectIds,context) {
+    var way_id = selectIds[0].substring(1);
+    return function brokeWayAction(graph) {
+        window.brokeWayCmd(way_id,false);
+        return graph;
+    };
+}
+
 function createAddMorePoints(selectIds,context) {
     var data = convert2JSON(selectIds,context);
     return function createAdd(graph) {
@@ -544,13 +552,21 @@ function addMomentaPackages(packageId) {
     // },10);
 }
 
-window.showLines = function (jsonobject) {
+
+window.showLines = function (jsonobject, zoom) {
+    if (undefined === zoom) {zoom = true;}
+    while (window.id.undo().length()>0){
+        window.id.undo();
+        window.id.history().undoAnnotation();
+    }
     sendPost(url.showLines,{'jsonObject':jsonobject},function (result) {
         result = JSON.parse(result);
         if (result.center){
             var center = result.center;
             window.id.map().center(center);
-            window.id.map().zoom(18);
+            if (zoom) {
+                window.id.map().zoom(18);
+            }
         }
         var createEles = result.created;
         for (var i=0; i<createEles.length; i+=10){
@@ -562,7 +578,36 @@ window.showLines = function (jsonobject) {
             }(eles),100);
         }
     });
-}
+};
+window.brokeWayCmd = function (way_id,zoom) {
+    if (undefined === zoom) {zoom = true;}
+    sendPost(url.brokeWay+way_id,{},function (result) {
+        window.current_step = 0;
+        window.current_view ='main_way';
+        var resultObj = JSON.parse(result);
+        console.log('step_count:'+ resultObj.step_count);
+        if (resultObj && resultObj.json_lanes.result_lines && resultObj.json_lanes.result_lines.length>0) {
+            window.showLines(JSON.stringify(resultObj.json_lanes),zoom);
+        } else {
+            alert('no broke line');
+        }
+    });
+};
+window.step = function (step) {
+    window.current_step = step;
+    window.showStepView(window.current_step,window.current_view);
+};
+window.view = function (view) {
+    window.current_view = view;
+    window.showStepView(window.current_step,window.current_view);
+};
+window.showStepView = function (step,view) {
+    sendPost(url.showStepView+step+'/'+view,{},function (result) {
+        if (result && result.length>0){
+            window.showLines(result,false);
+        }
+    });
+};
 function focusOnFrames(frameId) {
     // window.id.map().center([116.35815,39.82925]);
     // window.id.map().zoom(18);
@@ -578,4 +623,4 @@ function focusOnFrames(frameId) {
 }
 window.focusOnFrames = focusOnFrames;
 window.addPackages = addMomentaPackages;
-export {createLineSegment,actionAddStopLine,showMutiSegs,actionGetLocation,deleteLines,actionFillInfo,actionMerge,actionMomentaStraighten,createAddMorePoints,actionConvertDirection,actionConvertLineType,addMomentaPackages};
+export {createLineSegment,brokeWay,actionAddStopLine,showMutiSegs,actionGetLocation,deleteLines,actionFillInfo,actionMerge,actionMomentaStraighten,createAddMorePoints,actionConvertDirection,actionConvertLineType,addMomentaPackages};

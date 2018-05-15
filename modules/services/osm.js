@@ -68,7 +68,7 @@ var dispatch = d3_dispatch('authLoading', 'authDone', 'change', 'loading', 'load
     // }),
 
 
-    urlroot = 'http://10.2.133.251:6047',
+    urlroot = 'http://10.2.133.251:6023',
     oauth = osmAuth({
         url: urlroot,
         oauth_consumer_key: 'K6CBqGgZi1F6EIbqYddblFDTjbJsdso3DQzOUv3s',
