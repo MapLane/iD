@@ -720,6 +720,7 @@ export default {
     getCheckResults: function(packageId) {
         var url = apibase + 'checkresult/' + packageId;
         d3_request(url)
+            .on("beforesend", function (request) {request.withCredentials = true;})
             .mimeType('application/json')
             .response(function(xhr) {
                 return JSON.parse(xhr.responseText);
