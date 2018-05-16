@@ -938,10 +938,12 @@ export default {
             'lane' : 'lanes',
             'line' : 'line'
         }
-        loadDetection(imageKey);
+
         loadSplame(imageKey);
         if (!_mlyIntrinsicMatrixCache[packetName]){
             loadIntrinsicMatrix(imageKey);
+        } else {
+            loadDetection(imageKey);
         }
 
         function loadIntrinsicMatrix(imageKey) {
@@ -953,6 +955,7 @@ export default {
             })
                 .get(function(err, data){
                     _mlyIntrinsicMatrixCache[packetName] = data;
+                    loadDetection(imageKey);
                 });
         }
 
