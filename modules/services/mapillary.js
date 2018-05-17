@@ -765,6 +765,7 @@ export default {
             '&commentResult=' + commentResult;
 
         d3_request(url)
+            .on("beforesend", function (request) {request.withCredentials = true;})
             .header('Content-Type', 'application/x-www-form-urlencoded')
             .response(function(xhr) {
                 return JSON.parse(xhr.responseText);
