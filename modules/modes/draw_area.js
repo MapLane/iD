@@ -22,7 +22,6 @@ export function modeDrawArea(context, wayId, startGraph) {
         this.context = context;
 
         behavior.addNode = function(node) {
-            console.log(this.startGraph);
 
             var length = way.nodes.length,
                 penultimate = length > 2 ? way.nodes[length - 2] : null;

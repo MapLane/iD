@@ -9,6 +9,7 @@ import { t, textDirection } from '../util/locale';
 import { svgIcon } from '../svg';
 import { uiTooltipHtml } from './tooltipHtml';
 import { tooltip } from '../util/tooltip';
+import { serviceMapillary } from '../services';
 
 export function uiMapData(context) {
     var key = t('map_data.key'),
@@ -141,6 +142,63 @@ export function uiMapData(context) {
             //     .attr('tabindex', -1);
 
             setLayer(which, !showsLayer(which));
+
+        }
+
+        window.setPackage = (packageId) => {
+
+            serviceMapillary.reset();
+            let which = 'mapillary-images';
+            window.packets_name = packageId;
+            window.addPackages(window.packets_name);
+            var div = d3_select('#content').select('#bar').select('.limiter')
+                .append('div')
+                .attr('class', 'button-wrap1');
+            // .attr('style','right: 1000px;   width: 1000px;  position: fixed;   z-index: 100;');
+
+
+            var divphoto = div.append('div')
+                .attr('class', 'photo');
+            divphoto.append('input')
+                .attr('type', 'checkbox')
+                .attr('class', 'human-check photo-checkbox');
+            divphoto.append('span')
+                .text('图片质量问题');
+
+
+            var divDetection = div.append('div')
+                .attr('class', 'detection');
+            divDetection.append('input')
+                .attr('type', 'checkbox')
+                .attr('class', 'human-check detection-checkbox');
+            divDetection.append('span')
+                .text('检测算法问题');
+
+            var divSpslam = div.append('div')
+                .attr('class', 'spslam');
+            divSpslam.append('input')
+                .attr('type', 'checkbox')
+                .attr('class', 'human-check spslam-checkbox');
+            divSpslam.append('span')
+                .text('建图算法问题');
+
+            var note = div.append('textarea')
+                .attr('class', 'feedback-comment')
+                .text('请输入备注');
+
+            var divSubmit = div.append('button')
+                .attr('class', 'submit-feedback')
+                .text('提交');
+
+            var divPre = div.append('button')
+                .attr('class', 'pre-btn disabled')
+                .text('上一个');
+
+            var divAfter = div.append('button')
+                .attr('class', 'next-btn disabled')
+                .text('下一个');
+
+            setLayer(which, true);
 
         }
 

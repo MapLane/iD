@@ -424,7 +424,7 @@ button {
     border-radius:4px;
 }
 
-button:focus,
+/*button:focus,*/
 button:hover {
     background-color: #ececec;
 }
@@ -630,8 +630,8 @@ button.save.has-count .count::before {
 ------------------------------------------------------- */
 
 #bar {
-    position: fixed;
-    padding: 10px 0;
+    position: absolute;
+    padding: 10px;
     left: 0;
     top: 0;
     right: 0;
@@ -3934,9 +3934,6 @@ svg.mouseclick use.right {
 }
 
 /* Move over tooltips that are near the edge of screen */
-.add-point .tooltip {
-    left: 33.3333% !important;
-}
 [dir='rtl'] .add-point .tooltip {
     left: inherit !important;
 }
