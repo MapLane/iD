@@ -726,6 +726,12 @@ export default {
                 return JSON.parse(xhr.responseText);
             })
             .get(function(err, data) {
+                if(!!err) {
+                    if(err.currentTarget && err.currentTarget.status === 401) {
+                        let ref = window.location.href;
+                        window.location.replace('http://ucenter.momenta.works:8080/ucenter/a/login?ref=' + ref);
+                    }
+                }
                 console.log(data);
                 if(!err && !!data) {
                     _checkedKeyCache = data;
@@ -767,13 +773,23 @@ export default {
         d3_request(url)
             .on("beforesend", function (request) {request.withCredentials = true;})
             .header('Content-Type', 'application/x-www-form-urlencoded')
+            .on("error", function(error) {
+                console.trace(error);
+            })
             .response(function(xhr) {
                 return JSON.parse(xhr.responseText);
             })
             .post(postData, function(err, data) {
                 //if (!data || !data.propertites) return;
                 if(err) {
-                    alert('提交失败')
+                    alert('提交失败');
+                    if(!!err) {
+                        if(err.currentTarget && err.currentTarget.status === 401) {
+                            let ref = window.location.href;
+                            window.location.replace('http://ucenter.momenta.works:8080/ucenter/a/login?ref=' + ref);
+                        }
+                    }
+                    return;
                 }
                 alert('提交成功');
                 _checkedKeyCache[_mlySelectedImage.key] = {
