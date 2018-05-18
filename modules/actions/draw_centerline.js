@@ -2,6 +2,7 @@ import _each from 'lodash-es/each';
 import _uniq from 'lodash-es/uniq';
 import _uniqWith from 'lodash-es/uniqWith';
 import _without from 'lodash-es/without';
+import _clone from 'lodash-es/clone';
 import { median as d3_median } from 'd3-array';
 import {
     polygonArea as d3_polygonArea,
@@ -12,7 +13,7 @@ import {
     geoEuclideanDistance,
     geoInterp
 } from '../geo';
-import { osmNode ,osmWay} from '../osm';
+import { osmEntity, osmNode ,osmWay} from '../osm';
 import {
     modeAddArea,
     modeAddLine,
@@ -102,11 +103,13 @@ export function actionDrawCenterline(wayId, projection, context, maxAngle) {
 
         var way = osmWay();
         var ids = nodes.map(function(n) { return n.id; });
+        var tag = {'highway': 'lane-centerline'};
         graph = graph.replace(way);
 
         for (var i = 0; i < ids.length; ++i) {
             graph = graph.replace(graph.entity(way.id).addNode(ids[i]));
         }
+        graph = graph.replace(graph.entity(way.id).update({tags: tag}));
         return graph;
 
     }
