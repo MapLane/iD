@@ -27,11 +27,26 @@ export function actionJoinLanegroup(wayId, projection,context) {
         tags.route = 'bus';
         tags.type = 'lane_group';
         tags.name = wayId[0];
+        var role = 'test';
 
         graph = graph.replace(graph.entity(relation.id).update({tags: tags}));
+        var centerLineNum = 1;
+        var laneNum = 0;
+
         for (var i = 0; i < wayId.length; ++i)
         {
-            graph = graph.replace(graph.entity(relation.id).addMember(graph.entity(wayId[i])));
+            var wayTemp = graph.entity(wayId[i]);
+            if (wayTemp.tags &&  wayTemp.tags.highway === 'lane-centerline') {
+                role = 'c-' + centerLineNum;
+                centerLineNum++;
+            }
+            else {
+                role = 'l-' + laneNum;
+                laneNum++;
+            }
+            // actionAddMember(relation.id, { id: id[i], type: context.entity(id[i]).type, role: role });
+            // graph = graph.replace(graph.entity(relation.id).addMember(graph.entity(wayId[i])));
+            graph = graph.replace(graph.entity(relation.id).addMember({id: id[i], type: 'way', role: role}));
         }
 
         //context.enter(modeSelect(context, [relation.id]));
