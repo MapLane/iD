@@ -1,47 +1,49 @@
 /* railways */
 
-.id-container .preset-icon .icon.tag-railway.other-line {
+.preset-icon .icon.tag-railway.other-line {
     color: #fff;
     fill: #777;
 }
-.id-container .preset-icon .icon.tag-railway {
+.preset-icon .icon.tag-railway {
     color: #555;
     fill: #eee;
 }
 
 /* railway areas */
 
-.id-container path.stroke.area.tag-railway,
-.id-container .low-zoom path.stroke.area.tag-railway {
+path.stroke.area.tag-railway,
+.low-zoom path.stroke.area.tag-railway {
     stroke: white;
     stroke-width: 1;
     stroke-dasharray: none;
 }
-.id-container path.casing.area.tag-railway,
-.id-container .low-zoom path.casing.area.tag-railway {
+
+path.casing.area.tag-railway,
+.low-zoom path.casing.area.tag-railway {
     stroke: none;
 }
 
 /* narrow widths */
 
-.id-container path.shadow.tag-railway {
+path.shadow.tag-railway {
     stroke-width: 16;
 }
-.id-container path.casing.tag-railway {
+path.casing.tag-railway {
     stroke-width: 7;
 }
-.id-container path.stroke.tag-railway {
+path.stroke.tag-railway {
     stroke-width: 2;
     stroke-linecap: butt;
     stroke-dasharray: 12,12;
 }
-.id-container .low-zoom path.shadow.tag-railway {
+
+.low-zoom path.shadow.tag-railway {
     stroke-width: 12;
 }
-.id-container .low-zoom path.casing.tag-railway {
+.low-zoom path.casing.tag-railway {
     stroke-width: 5;
 }
-.id-container .low-zoom path.stroke.tag-railway {
+.low-zoom path.stroke.tag-railway {
     stroke-width: 2;
     stroke-dasharray: 6,6;
 }
@@ -49,68 +51,74 @@
 
 /* styles */
 
-.id-container path.casing.tag-railway {
+path.casing.tag-railway {
     stroke: #555;
 }
-.id-container path.stroke.tag-railway {
+path.stroke.tag-railway {
     stroke: #eee;
 }
-.id-container .preset-icon .icon.tag-railway-disused,
-.id-container .preset-icon .icon.tag-railway-abandoned {
+
+
+.preset-icon .icon.tag-railway-disused,
+.preset-icon .icon.tag-railway-abandoned {
     color: #999;
     fill: #eee;
 }
-.id-container path.casing.tag-railway-abandoned {
+path.casing.tag-railway-abandoned {
     stroke: #999;
 }
-.id-container path.stroke.tag-railway-abandoned {
+path.stroke.tag-railway-abandoned {
     stroke: #eee;
 }
-.id-container .preset-icon .icon.tag-railway-subway {
+
+
+.preset-icon .icon.tag-railway-subway {
     color: #222;
     fill: #bbb;
 }
-.id-container path.casing.tag-railway-subway {
+path.casing.tag-railway-subway {
     stroke: #222;
 }
-.id-container path.stroke.tag-railway-subway {
+path.stroke.tag-railway-subway {
     stroke: #bbb;
 }
 
 
 /* railway platforms - like sidewalks */
 
-.id-container .preset-icon .icon.highway-footway.tag-railway-platform {
+.preset-icon .icon.highway-footway.tag-railway-platform {
     color: #ae8681;
     fill: #dcd9b9;
 }
-.id-container path.shadow.tag-railway-platform {
+path.shadow.tag-railway-platform {
     stroke-width: 16;
 }
-.id-container path.casing.tag-railway-platform {
+path.casing.tag-railway-platform {
     stroke: #dcd9b9;
     stroke-width: 5;
     stroke-linecap: round;
     stroke-dasharray: none;
 }
-.id-container path.stroke.tag-railway-platform {
+path.stroke.tag-railway-platform {
     stroke: #ae8681;
     stroke-width: 3;
     stroke-linecap: butt;
     stroke-dasharray: 6, 6;
 }
-.id-container .low-zoom path.shadow.tag-railway-platform {
+
+.low-zoom path.shadow.tag-railway-platform {
     stroke-width: 12;
 }
-.id-container .low-zoom path.casing.tag-railway-platform {
+.low-zoom path.casing.tag-railway-platform {
     stroke-width: 3;
 }
-.id-container .low-zoom path.stroke.tag-railway-platform {
+.low-zoom path.stroke.tag-railway-platform {
     stroke-width: 1;
     stroke-linecap: butt;
     stroke-dasharray: 3, 3;
 }
-.id-container g.midpoint.tag-railway-platform .fill {
+
+g.midpoint.tag-railway-platform .fill {
     fill: #fff;
     stroke: #333;
     stroke-opacity: .8;

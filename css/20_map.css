@@ -1,182 +1,196 @@
+
+use { pointer-events: none; }
+
 /* base styles */
-.id-container use {
-    pointer-events: none;
-}/* IE needs :not(.oneway) */
+.layer-osm path:not(.oneway) { fill: none; }     /* IE needs :not(.oneway) */
 
 /* the above fill: none rule affects paths in <use> shadow dom only in Firefox */
-.id-container .layer-osm path:not(.oneway) {
-    fill: none;
-}
-.id-container .layer-osm use.icon path {
-    fill: #333;/* FF svg Maki icons */
-}
-.id-container .layer-osm .turn use path {
-    fill: #000;/* FF turn restriction icons */
-}
-.id-container #turn-only-shape2,
-.id-container #turn-only-u-shape2 {
-    fill: #7092FF;/* FF turn-only, turn-only-u */
-}
-.id-container #turn-no-shape2,
-.id-container #turn-no-u-shape2 {
-    fill: #E06D5F;/* FF turn-no, turn-no-u */
-}
-.id-container #turn-yes-shape2,
-.id-container #turn-yes-u-shape2 {
-    fill: #8CD05F;/* FF turn-yes, turn-yes-u */
-}
-.id-container g.point .shadow,
-.id-container g.vertex .shadow,
-.id-container g.midpoint .shadow {
+.layer-osm use.icon path { fill: #333; }                       /* FF svg Maki icons */
+.layer-osm .turn use path { fill: #000; }                      /* FF turn restriction icons */
+#turn-only-shape2, #turn-only-u-shape2 { fill: #7092FF; }  /* FF turn-only, turn-only-u */
+#turn-no-shape2, #turn-no-u-shape2     { fill: #E06D5F; }  /* FF turn-no, turn-no-u */
+#turn-yes-shape2, #turn-yes-u-shape2   { fill: #8CD05F; }  /* FF turn-yes, turn-yes-u */
+
+g.point .shadow,
+g.vertex .shadow,
+g.midpoint .shadow {
     pointer-events: all;
 }
-.id-container path.shadow {
+
+path.shadow {
     pointer-events: stroke;
 }
 
 /* points */
 
-.id-container g.point .stroke {
+g.point .stroke {
     stroke: #444;
     stroke-width: 1;
     fill: #fff;
 }
-.id-container g.point .shadow {
+
+g.point .shadow {
     fill: none;
     stroke: #f6634f;
     stroke-width: 16;
     stroke-opacity: 0;
 }
-.id-container g.point.related:not(.selected) .shadow,
-.id-container g.point.hover:not(.selected) .shadow {
+
+g.point.related:not(.selected) .shadow,
+g.point.hover:not(.selected) .shadow {
     stroke-opacity: 0.5;
 }
-.id-container g.point.selected .shadow {
+
+g.point.selected .shadow {
     stroke-opacity: 0.7;
 }
-.id-container g.point.active,
-.id-container g.point.active * {
+
+g.point.active, g.point.active * {
     pointer-events: none;
 }
-.id-container g.point ellipse.stroke {
+
+g.point ellipse.stroke {
     display: none;
 }
-.id-container .mode-drag-node g.point.active ellipse.stroke {
+
+.mode-drag-node g.point.active ellipse.stroke {
     display: block;
 }
 
+
 /* vertices and midpoints */
 
-.id-container g.vertex .fill {
+g.vertex .fill {
     fill: #000;
 }
-.id-container g.vertex .stroke {
+
+g.vertex .stroke {
     stroke: #666;
     stroke-width: 1;
     fill: white;
 }
-.id-container g.vertex.shared .stroke {
+
+g.vertex.shared .stroke {
     fill: #bbb;
 }
-.id-container g.midpoint .fill {
+
+g.midpoint .fill {
     fill: #eee;
     stroke: #444;
     stroke-opacity: .6;
     opacity: .7;
 }
-.id-container g.vertex .shadow,
-.id-container g.midpoint .shadow {
+
+g.vertex .shadow,
+g.midpoint .shadow {
     stroke-width: 6;
     fill: #f6634f;
     fill-opacity: 0;
 }
-.id-container g.vertex.vertex-hover {
+
+g.vertex.vertex-hover {
     display: none;
 }
-.id-container .mode-draw-area g.vertex.vertex-hover,
-.id-container .mode-draw-line g.vertex.vertex-hover,
-.id-container .mode-add-area g.vertex.vertex-hover,
-.id-container .mode-add-line g.vertex.vertex-hover,
-.id-container .mode-add-point g.vertex.vertex-hover,
-.id-container .mode-drag-node g.vertex.vertex-hover {
+
+.mode-draw-area g.vertex.vertex-hover,
+.mode-draw-line g.vertex.vertex-hover,
+.mode-add-area  g.vertex.vertex-hover,
+.mode-add-line  g.vertex.vertex-hover,
+.mode-add-point g.vertex.vertex-hover,
+.mode-drag-node g.vertex.vertex-hover {
     display: block;
 }
-.id-container .mode-draw-area .hover-disabled g.vertex.vertex-hover,
-.id-container .mode-draw-line .hover-disabled g.vertex.vertex-hover,
-.id-container .mode-add-area .hover-disabled g.vertex.vertex-hover,
-.id-container .mode-add-line .hover-disabled g.vertex.vertex-hover,
-.id-container .mode-add-point .hover-disabled g.vertex.vertex-hover,
-.id-container .mode-drag-node .hover-disabled g.vertex.vertex-hover {
+
+.mode-draw-area .hover-disabled g.vertex.vertex-hover,
+.mode-draw-line .hover-disabled g.vertex.vertex-hover,
+.mode-add-area  .hover-disabled g.vertex.vertex-hover,
+.mode-add-line  .hover-disabled g.vertex.vertex-hover,
+.mode-add-point .hover-disabled g.vertex.vertex-hover,
+.mode-drag-node .hover-disabled g.vertex.vertex-hover {
     display: none;
 }
-.id-container g.vertex.related:not(.selected) .shadow,
-.id-container g.vertex.hover:not(.selected) .shadow,
-.id-container g.midpoint.related:not(.selected) .shadow,
-.id-container g.midpoint.hover:not(.selected) .shadow {
+
+g.vertex.related:not(.selected) .shadow,
+g.vertex.hover:not(.selected) .shadow,
+g.midpoint.related:not(.selected) .shadow,
+g.midpoint.hover:not(.selected) .shadow {
     fill-opacity: 0.5;
 }
-.id-container g.vertex.selected .shadow {
+
+g.vertex.selected .shadow {
     fill-opacity: 0.7;
 }
-.id-container .mode-draw-area g.midpoint,
-.id-container .mode-draw-line g.midpoint,
-.id-container .mode-add-area g.midpoint,
-.id-container .mode-add-line g.midpoint,
-.id-container .mode-add-point g.midpoint {
-    display: none;
+
+.mode-draw-area g.midpoint,
+.mode-draw-line g.midpoint,
+.mode-add-area g.midpoint,
+.mode-add-line g.midpoint,
+.mode-add-point g.midpoint {
+  display: none;
 }
 
 /* lines */
 
-.id-container .preset-icon .icon.other-line {
+.preset-icon .icon.other-line {
     color: #fff;
     fill: #777;
 }
-.id-container path.line {
+
+path.line {
     stroke-linecap: round;
     stroke-linejoin: bevel;
 }
-.id-container path.stroke {
+
+path.stroke {
     stroke: #000;
     stroke-width: 4;
 }
-.id-container path.shadow {
+
+path.shadow {
     stroke: #f6634f;
     stroke-width: 16;
     stroke-opacity: 0;
 }
-.id-container path.shadow.related:not(.selected),
-.id-container path.shadow.hover:not(.selected) {
+
+path.shadow.related:not(.selected),
+path.shadow.hover:not(.selected) {
     stroke-opacity: 0.4;
 }
-.id-container path.shadow.selected {
+
+path.shadow.selected {
     stroke-opacity: 0.7;
 }
-.id-container path.line.stroke {
+
+path.line.stroke {
     stroke: #fff;
     stroke-width: 2;
 }
 
+
 /* Labels / Markers */
 
-.id-container text {
-    font-size: 10px;
+text {
+    font-size:10px;
     pointer-events: none;
     color: #222;
     opacity: 1;
 }
-.id-container .oneway .textpath.tag-waterway {
+
+.oneway .textpath.tag-waterway {
     fill: #002F35;
 }
-.id-container path.oneway {
+
+path.oneway {
     stroke-width: 6px;
 }
-.id-container text.arealabel-halo,
-.id-container text.linelabel-halo,
-.id-container text.pointlabel-halo,
-.id-container text.arealabel,
-.id-container text.linelabel,
-.id-container text.pointlabel {
+
+
+text.arealabel-halo,
+text.linelabel-halo,
+text.pointlabel-halo,
+text.arealabel,
+text.linelabel,
+text.pointlabel {
     dominant-baseline: middle;
     text-anchor: middle;
     font-size: 12px;
@@ -190,59 +204,69 @@
 
 /* Opera doesn't support dominant-baseline. See #715 */
 /* Safari 10 seems to have regressed too */
-.id-container .linelabel-halo .textpath,
-.id-container .linelabel .textpath {
-    baseline-shift: -33%;
-    dominant-baseline: auto;
+.linelabel-halo .textpath,
+.linelabel .textpath {
+  baseline-shift: -33%;
+  dominant-baseline: auto;
 }
-.id-container .layer-halo text {
+
+.layer-halo text {
     opacity: 0.7;
     stroke: #fff;
     stroke-width: 5px;
     stroke-miterlimit: 1;
 }
-.id-container text.proximate {
+
+text.proximate {
     opacity: 0;
 }
-.id-container text.point {
+
+text.point {
     font-size: 10px;
 }
-.id-container .icon.areaicon-halo {
+
+.icon.areaicon-halo {
     opacity: 0.6;
     stroke: #999;
     stroke-width: 2px;
     stroke-miterlimit: 1;
 }
-.id-container .icon.areaicon {
+
+.icon.areaicon {
     fill: #222;
     opacity: 0.8;
 }
 
+
 /* Turns */
 
-.id-container g.turn rect,
-.id-container g.turn circle {
+g.turn rect,
+g.turn circle {
     fill: none;
     pointer-events: all;
 }
-.id-container .form-field-restrictions .vertex {
+
+.form-field-restrictions .vertex {
     pointer-events: none;
     cursor: auto !important;
 }
-.id-container .lasso #map {
+
+.lasso #map {
     pointer-events: visibleStroke;
 }
 
 /* GPX Paths */
 
-.id-container .layer-gpx {
+.layer-gpx {
     pointer-events: none;
 }
-.id-container path.gpx {
+
+path.gpx {
     stroke: #FF26D4;
     stroke-width: 2;
     fill: none;
 }
-.id-container text.gpx {
+
+text.gpx {
     fill: #FF26D4;
 }
