@@ -1,54 +1,46 @@
-#bar .button-wrap1 {
+.id-container #bar .button-wrap1 {
     left: 600px;
     width: 400px;
     position: absolute;
     z-index: 100;
 }
-
-#bar .button-wrap1 .submit-feedback {
+.id-container #bar .button-wrap1 .submit-feedback {
     left: 300px;
     width: 100px;
     position: absolute;
 }
-
-#bar .button-wrap1 .pre-btn {
+.id-container #bar .button-wrap1 .pre-btn {
     position: absolute;
     left: 415px;
     width: 50px;
     height: 18px;
 }
-
-#bar .button-wrap1 .next-btn {
+.id-container #bar .button-wrap1 .next-btn {
     position: absolute;
     left: 415px;
     top: 21px;
     width: 50px;
     height: 18px;
 }
-
-#bar .button-wrap1 .photo {
+.id-container #bar .button-wrap1 .photo {
     left: 10px;
     top: -10px;
     position: absolute;
-    text: 'Hello'
-
+    text: 'Hello';
 }
-
-#bar .button-wrap1 .detection {
+.id-container #bar .button-wrap1 .detection {
     left: 10px;
     top: 10px;
     position: absolute;
     z-index: 100;
 }
-
-#bar .button-wrap1 .spslam {
+.id-container #bar .button-wrap1 .spslam {
     left: 10px;
     top: 30px;
     position: absolute;
     z-index: 100;
 }
-
-#bar .button-wrap1 .feedback-comment {
+.id-container #bar .button-wrap1 .feedback-comment {
     left: 120px;
     top: -5px;
     width: 160px;
@@ -56,7 +48,6 @@
     position: absolute;
     z-index: 100;
 }
-
-.viewfield-group.checked *{
-    fill : #0000FF !important;
+.id-container .viewfield-group.checked * {
+    fill: #0000FF !important;
 }
