@@ -3576,9 +3576,6 @@ body {
 }
 
 /* Move over tooltips that are near the edge of screen */
-.add-point .tooltip {
-    left: 33.3333% !important;
-}
 [dir='rtl'] .add-point .tooltip {
     left: inherit !important;
 }
