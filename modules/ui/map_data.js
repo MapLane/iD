@@ -145,7 +145,7 @@ export function uiMapData(context) {
 
         }
 
-        window.setPackage = (packageId) => {
+        window.setPackage = function(packageId) {
 
             serviceMapillary.reset();
             let which = 'mapillary-images';
