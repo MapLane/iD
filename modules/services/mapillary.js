@@ -785,7 +785,7 @@ export default {
                     alert('提交失败');
                     if(!!err) {
                         if(err.currentTarget && err.currentTarget.status === 401) {
-                            let ref = window.location.href;
+                            var ref = window.location.href;
                             window.location.replace('http://ucenter.momenta.works:8080/ucenter/a/login?ref=' + ref);
                         }
                     }
