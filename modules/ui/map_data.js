@@ -148,7 +148,7 @@ export function uiMapData(context) {
         window.setPackage = function(packageId) {
 
             serviceMapillary.reset();
-            let which = 'mapillary-images';
+            var which = 'mapillary-images';
             window.packets_name = packageId;
             window.addPackages(window.packets_name);
             var div = d3_select('#content').select('#bar').select('.limiter')
