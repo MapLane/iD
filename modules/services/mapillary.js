@@ -29,7 +29,7 @@ import { utilDetect } from '../util/detect';
 import { utilQsString, utilRebind } from '../util';
 import { AddDistortion } from './distort';
 
-var apibase = 'http://mapeditor.momenta.works:5123/',
+var apibase = 'http://10.2.0.40:5123/',
     viewercss = 'mapillary-js/mapillary.min.css',
     viewerjs = 'mapillary-js/mapillary.min.js',
     clientId = 'NzNRM2otQkR2SHJzaXJmNmdQWVQ0dzo1ZWYyMmYwNjdmNDdlNmVi',
