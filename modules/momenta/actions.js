@@ -7,6 +7,9 @@ import {actionAddEntity,actionDeleteNode,actionDeleteWay,actionCopyEntities} fro
 import {osmNode,osmWay,osmRelation} from '../osm';
 import {} from './ui';
 import { services } from '../services';
+import {
+    select as d3_select
+} from 'd3-selection';
 
 function createEntity(ele,type){
     if (ele.type==='node'||type === 'node'||(ele.tags!=null && ele.tags.tableInfo==='poles'|| ele.tags.tableInfo==='boards')){
@@ -580,6 +583,7 @@ window.showLines = function (jsonobject, zoom) {
     });
 };
 window.brokeWayCmd = function (way_id,zoom) {
+    window.current_way_id = way_id;
     if (undefined === zoom) {zoom = true;}
     sendPost(url.brokeWay+way_id,{},function (result) {
         window.current_step = 0;
@@ -592,7 +596,45 @@ window.brokeWayCmd = function (way_id,zoom) {
             alert('no broke line');
         }
     });
+
+    var div = d3_select('#content').select('#bar').select('.limiter');
+    var divBrokeLine = div.select('.broken-line');
+    if (divBrokeLine.empty()){
+        divBrokeLine = div.append('div').attr('class', 'button-wrap1')
+            .append('div').attr('class', 'broken-line');
+        divBrokeLine.append('textarea')
+            .attr('class', 'broke-line-comment')
+            .attr('placeholder','请输入打断备注');
+
+        divBrokeLine.append('button')
+            .attr('class', 'broke-line-yes')
+            .text('打断正确').on('click', onclick_brokeline_yes);
+
+        divBrokeLine.append('button')
+            .attr('class', 'broke-line-no')
+            .text('打断错误').on('click', onclick_brokeline_no);
+    } else {
+        divBrokeLine = div.select('.broken-line');
+        divBrokeLine.select('.broke-line-comment').property('value','');
+    }
+
+
 };
+function onclick_brokeline_yes(){
+    var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
+    onclick_brokeline(true,note);
+}
+function onclick_brokeline_no(){
+    var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
+    onclick_brokeline(false,note);
+}
+function onclick_brokeline(result,note){
+    sendPost(url.approveBrokeWay+window.current_way_id,{'result':result,'note':note},function (result) {
+        alert('保存成功');
+    });
+
+    console.log(result+','+note+',way_id:'+window.current_way_id);
+}
 window.step = function (step) {
     window.current_step = step;
     window.showStepView(window.current_step,window.current_view);

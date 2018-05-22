@@ -60,3 +60,15 @@
 .viewfield-group.checked *{
     fill : #0000FF !important;
 }
+
+#bar .broke-line-no{
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#bar .broke-line-yes{
+    padding-left: 10px;
+    padding-right: 10px;
+}
