@@ -40,10 +40,14 @@ export function actionJoinLanegroup(wayId, projection,context) {
                 role = 'c-' + centerLineNum;
                 centerLineNum++;
             }
-            else {
-                role = 'l-' + laneNum;
+            else if (wayTemp.tags && (wayTemp.tags.highway === 'lane-white-solid' || wayTemp.tags.highway === 'lane-white-dash')) {
+                role = 'l' + laneNum;
                 laneNum++;
             }
+            else {
+                role = 'rc';
+            }
+
             // actionAddMember(relation.id, { id: id[i], type: context.entity(id[i]).type, role: role });
             // graph = graph.replace(graph.entity(relation.id).addMember(graph.entity(wayId[i])));
             graph = graph.replace(graph.entity(relation.id).addMember({id: id[i], type: 'way', role: role}));
