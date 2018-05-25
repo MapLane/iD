@@ -12,9 +12,9 @@ url.upload_package = 'http://10.2.135.59:1123/upload';
 
 url.check_ok = 'http://10.2.149.54:23200/manage_task/submit_task'
 
-url.queryFrameLocation = 'http://mapeditor.momenta.works:5123/location/keyframe';
+url.queryFrameLocation = 'http://172.17.0.5:5123/location/keyframe';
 
-url.queryPackageLocation = 'http://mapeditor.momenta.works:5123/location/packet';
+url.queryPackageLocation = 'http://172.17.0.5:5123/location/packet';
 
 url.brokeWay='http://10.2.149.54:5000/broke_way/';
 url.showStepView='http://10.2.149.54:5000/show_step_view/';

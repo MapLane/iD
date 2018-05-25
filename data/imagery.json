@@ -66527,7 +66527,7 @@
             "id": "yby",
             "name": "园博园",
             "type": "tms",
-            "template": "http://mapeditor.momenta.works:4005/api/default.aerial_yby.mbtiles/{z}/{x}/{y}.png",
+            "template": "http://172.17.0.5:4005/api/default.aerial_yby.mbtiles/{z}/{x}/{y}.png",
             "scaleExtent": [
                 0,
                 22
