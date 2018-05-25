@@ -423,13 +423,6 @@ function actionAddStopLine(selectIds, context) {
                 copies[ele.id].tags.tableInfo = 'lane_lines';
                 copies[ele.id].tags.merge_count = 1;
 
-                // if (ele.tags.type === 'dashed'){
-                //     copies[ele.id].tags.highway = 'lane-white-solid';
-                //     copies[ele.id].tags.type = 'solid';
-                // }else if (ele.tags.type === 'solid'){
-                //     copies[ele.id].tags.highway = 'lane-white-dash';
-                //     copies[ele.id].tags.type = 'dashed';
-                // }
                 actionDeleteWay(ele.id);
                 actionAddEntity(copies[ele.id]);
             }
@@ -443,39 +436,6 @@ function actionAddStopLine(selectIds, context) {
 
 function addPackage(result) {
     return function clearAll(graph) {
-        // var graph = context.graph();
-
-        // function deleteElement(entities) {
-        //     for (var ele in entities) {
-        //         // if (ele.indexOf('n')>-1){
-        //         //     graph = actionDeleteNode(ele)(graph);
-        //         // }
-        //         if (ele.indexOf('w')>-1){
-        //             var entity = entities[ele];
-        //             if (entity){
-        //                 graph = actionDeleteWay(ele)(graph);
-        //                 for (var ndindex in entity.nodes){
-        //                     graph = actionDeleteNode(entity.nodes[ndindex])(graph);
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-        // var entities = graph.entities;
-        // deleteElement(entities);
-
-        // var result = sendPost(url.check_host,{'packageIds':packageId},function (data) {
-        //
-        // });
-        // result = JSON.parse(result);
-        // if (result.center){
-        //     var center = result.center;
-        //     window.id.map().center(center);
-        //     window.id.map().zoom(18);
-        // }
-        // // window.id.map().center([-77.0, 38.9]);
-        // // window.id.map().zoom(2.0);
-        // var createEles = result.created;
 
         for (var i=0; i<result.length; i++){
 
@@ -510,10 +470,7 @@ if (!window.momentaPool ){
 }
 
 function addMomentaPackages(packageId) {
-    while (window.id.undo().length()>0){
-        window.id.undo();
-        window.id.history().undoAnnotation();
-    }
+
     if (packageId==null ||packageId === ''){
         return;
     }
@@ -538,6 +495,12 @@ function addMomentaPackages(packageId) {
         services.mapillary.getCheckResults(packageId);
 
         var createEles = result.created;
+        if (createEles.length > 0){
+            while (window.id.undo().length()>0){
+                window.id.undo();
+                window.id.history().undoAnnotation();
+            }
+        }
         for (var i=0; i<createEles.length; i+=10){
             var eles = createEles.slice(i,i+10);
             setTimeout(function (eles) {

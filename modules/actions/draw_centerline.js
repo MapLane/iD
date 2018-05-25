@@ -79,20 +79,22 @@ export function actionDrawCenterline(wayId, projection, context, maxAngle) {
 
         var mids =[];
         var longpoints = [];    //used for debug, will be deleted later
-        for (var i = 0; i < wayShortPoints.length; ++i){
+        mids.push(vecMid(wayShortPoints[0], wayLongPoints[0]));
+        for (var i = 0; i < wayLongPoints.length; ++i){
             var mid = [];
-            var distance = cloestPointonLine(wayShortPoints[i],wayLongPoints[0],wayLongPoints[1],true);
-            var snapped =  cloestPointonLine(wayShortPoints[i],wayLongPoints[0],wayLongPoints[1],false);
-            for (var j = 0; j < wayLongPoints.length -1; ++j) {
-                var snapped1 = cloestPointonLine(wayShortPoints[i],wayLongPoints[j],wayLongPoints[j+1],false);
-                var distance1 = cloestPointonLine(wayShortPoints[i],wayLongPoints[j],wayLongPoints[j+1],true);
+            var distance = cloestPointonLine(wayLongPoints[i],wayShortPoints[0],wayShortPoints[1],true);
+            var snapped =  cloestPointonLine(wayLongPoints[i],wayShortPoints[0],wayShortPoints[1],false);
+            for (var j = 0; j < wayShortPoints.length -1; ++j) {
+                var snapped1 = cloestPointonLine(wayLongPoints[i],wayShortPoints[j],wayShortPoints[j+1],false);
+                var distance1 = cloestPointonLine(wayLongPoints[i],wayShortPoints[j],wayShortPoints[j+1],true);
                 distance =Math.min(distance1,distance);
                 snapped = distance === distance1 ? snapped1 :snapped;
-                mid = vecMid(wayShortPoints[i],snapped);
+                mid = vecMid(wayLongPoints[i],snapped);
             }
             mids.push(mid);
             longpoints.push(snapped);
         }
+        mids.push(vecMid(wayLongPoints[wayLongPoints.length-1],wayShortPoints[wayShortPoints.length-1]));
 
         var nodes = [];
 
