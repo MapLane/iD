@@ -6,7 +6,7 @@ url.showSegs = 'showSegs';
 
 url.check_host='http://10.2.135.59:1123';
 
-url.showLines='http://10.2.0.40:1123/show';
+url.showLines='http://172.21.2.86:1123/show';
 
 url.upload_package = 'http://10.2.135.59:1123/upload';
 
