@@ -1,0 +1,17 @@
+{
+    "icon": "highway-lane-white-dash",
+    "fields": [
+        "name"
+    ],
+    "geometry": [
+        "line"
+    ],
+    "tags": {
+        "momenta": "broke-line"
+    },
+    "reference": {
+        "key": "lane",
+        "value": "white-dash"
+    },
+    "name": "momenta-broke-line"
+}

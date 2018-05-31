@@ -3,13 +3,16 @@ import {
     convert2JSON,sendPost
 } from './utils';
 import {url} from './url';
-import {actionAddEntity,actionDeleteNode,actionDeleteWay,actionCopyEntities} from '../actions';
+import {actionAddEntity, actionDeleteNode, actionDeleteWay, actionCopyEntities, actionAddMidpoint,actionSplit} from '../actions';
 import {osmNode,osmWay,osmRelation} from '../osm';
 import {} from './ui';
 import { services } from '../services';
+import _debounce from 'lodash-es/debounce';
 import {
     select as d3_select
 } from 'd3-selection';
+import {geoChooseEdge} from "../geo";
+import {t} from "../util/locale";
 
 function createEntity(ele,type){
     if (ele.type==='node'||type === 'node'||(ele.tags!=null && ele.tags.tableInfo==='poles'|| ele.tags.tableInfo==='boards')){
@@ -545,26 +548,70 @@ window.showLines = function (jsonobject, zoom) {
         }
     });
 };
-window.brokeWayCmd = function (way_id,zoom) {
-    window.current_way_id = way_id;
-    if (undefined === zoom) {zoom = true;}
-    sendPost(url.brokeWay+way_id,{},function (result) {
-        window.current_step = 0;
-        window.current_view ='main_way';
+
+//broke line start======================= @suchu.gao
+window.showBrokeLineDebounce = _debounce(showBrokeLine,500,{'maxWait': 3000 });
+window.startBrokeLineApprove = function(){
+    window.id.map().on('move.show_broke_line',function () {
+        console.log('enter move event');
+        window.showBrokeLineDebounce();
+    });
+};
+window.stopBrokeLineApprove = function(){
+    window.id.map().on('move.show_broke_line',null);
+};
+function showBrokeLine(){
+    //console.log('enter showBrokeLine');
+    if (window.id.map().zoom() <17)
+        return;
+    var geoExtent = window.id.extent();
+    sendPost(url.showBrokeLine + geoExtent[0][0] + ',' + geoExtent[0][1] + ',' + geoExtent[1][0] + ',' + geoExtent[1][1], {}, function (result) {
         var resultObj = JSON.parse(result);
-        console.log('step_count:'+ resultObj.step_count);
-        if (resultObj && resultObj.json_lanes.result_lines && resultObj.json_lanes.result_lines.length>0) {
-            window.showLines(JSON.stringify(resultObj.json_lanes),zoom);
-        } else {
-            alert('no broke line');
+        console.log('broke_line_count:' + resultObj.step_count);
+        if (resultObj && resultObj.json_lanes_show && resultObj.json_lanes_show.created.length > 0) {
+            drawBrokeLine(resultObj.json_lanes_show);
         }
     });
+}
+function drawBrokeLine(result){
+    var createEles = result.created;
+    createEles = filteDupBrokeLine(createEles);
+    for (var i=0; i<createEles.length; i+=10){
+        var eles = createEles.slice(i,i+10);
+        setTimeout(function (eles) {
+            return function () {
+                window.id.perform(addPackage(eles), 'addMomentaPackages');
+                showBrokeLinePanel();
+            };
+        }(eles),100);
+    }
+}
+function filteDupBrokeLine(list){
+    if (!window.momentaPool.brokeLineDupSet) {
+        window.momentaPool.brokeLineDupSet = new Map();
+    }
+    var dupSet = window.momentaPool.brokeLineDupSet;
+    var resultList = new Array();
+    for (var i=0; i<list.length; i++){
+        var item = list[i];
+        if (item.uuid==null){
+            resultList.push(item);
+        } else {
+            if (!dupSet.has(item.uuid)){
+                resultList.push(item);
+                dupSet.set(item.uuid,1);
+            }
+        }
+    }
+    return resultList;
+}
 
+function showBrokeLinePanel(){
     var div = d3_select('#content').select('#bar').select('.limiter');
     var divBrokeLine = div.select('.broken-line');
     if (divBrokeLine.empty()){
         divBrokeLine = div.append('div').attr('class', 'button-wrap1')
-            .append('div').attr('class', 'broken-line');
+            .append('div').attr('class', 'broken-line-div');
         divBrokeLine.append('textarea')
             .attr('class', 'broke-line-comment')
             .attr('placeholder','请输入打断备注');
@@ -580,24 +627,104 @@ window.brokeWayCmd = function (way_id,zoom) {
         divBrokeLine = div.select('.broken-line');
         divBrokeLine.select('.broke-line-comment').property('value','');
     }
-
-
-};
+}
 function onclick_brokeline_yes(){
+    var context = window.id;
+    if (context.selectedIDs().length !== 1){
+        alert('只允许选中一条打断线');
+    }
+    var entity = context.entity(context.selectedIDs()[0]);
+    if (entity.type!=='way' || entity.tags.momenta!=='broke-line'){
+        alert('只允许选中一条打断线');
+    }
+    //console.log('selectIDs:'+context.selectedIDs());
+    var node_list = entity.nodes;
+    for (var i=0; i<node_list.length; i++){
+        var node = context.entity(entity.nodes[i]);
+        split_way(node);
+    }
+    context.perform(actionDeleteWay(entity.id));
+
     var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
-    onclick_brokeline(true,note);
+    onclick_brokeline(entity.uuid,true,note);
 }
 function onclick_brokeline_no(){
+    var context = window.id;
+    if (context.selectedIDs().length !== 1){
+        alert('只允许选中一条打断线');
+    }
+    var entity = context.entity(context.selectedIDs()[0]);
+    if (entity.type!=='way' || entity.tags.momenta!=='broke-line'){
+        alert('只允许选中一条打断线');
+    }
     var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
-    onclick_brokeline(false,note);
+    onclick_brokeline(entity.uuid,false,note);
 }
-function onclick_brokeline(result,note){
-    sendPost(url.approveBrokeWay+window.current_way_id,{'result':result,'note':note},function (result) {
+function onclick_brokeline(way_id,result,note){
+    sendPost(url.approveBrokeWay+way_id,{'result':result,'note':note},function (result) {
         alert('保存成功');
     });
 
-    console.log(result+','+note+',way_id:'+window.current_way_id);
+    console.log(result+','+note+',way_id:'+way_id);
 }
+function split_way(node){
+    var context = window.id;
+    var newnode = createEntity({},'node');
+    newnode.tags.momenta = 'broke-point';
+    var loc = context.projection(node.loc);
+    //根据关联way找
+    if (node.split_way!=null) {
+        var way = context.entity(node.split_way);
+        var choice = geoChooseEdge(context.childNodes(way), loc, context.projection);
+        if (choice.distance<1){
+            var midpoint = { loc: node.loc, edge: [way.nodes[choice.index - 1], way.nodes[choice.index]] };
+            context.perform(actionAddMidpoint(midpoint, newnode),
+                actionSplit(newnode.id));
+            return;
+        }
+    }
+    //遍历找
+    var minchoice = null;
+    for (var entity_id in context.graph().entities){
+        if (entity_id.substring(0,1)==='w' && context.graph().hasEntity(entity_id)){
+            var entity = context.graph().entity(entity_id);
+            if (entity.tags.momenta !=='broke-line') {
+                choice = geoChooseEdge(context.childNodes(entity), loc, context.projection);
+                if (minchoice == null || minchoice.distance > choice.distance) {
+                    minchoice = choice;
+                    way = entity;
+                }
+            }
+        }
+    }
+    if (minchoice!=null && minchoice.distance<1){
+        midpoint = { loc: node.loc, edge: [way.nodes[minchoice.index - 1], way.nodes[minchoice.index]] };
+        context.perform(actionAddMidpoint(midpoint, newnode),
+            actionSplit(newnode.id));
+        return;
+    }
+}
+window.brokeWayCmd = function (way_id,zoom) {
+    if (undefined === zoom) {zoom = true;}
+    sendPost(url.brokeWay+way_id,{},function (result) {
+        window.current_step = 0;
+        window.current_view ='main_way';
+        var resultObj = JSON.parse(result);
+        console.log('step_count:'+ resultObj.step_count);
+        if (resultObj && resultObj.json_lanes_show && resultObj.json_lanes_show.created.length>0) {
+            drawBrokeLine(resultObj.json_lanes_show);
+        } else {
+            alert('no broke line');
+        }
+    });
+
+    showBrokeLinePanel();
+};
+
+
+
+
+
 window.step = function (step) {
     window.current_step = step;
     window.showStepView(window.current_step,window.current_view);
@@ -613,6 +740,7 @@ window.showStepView = function (step,view) {
         }
     });
 };
+//broke line end======================= @suchu.gao
 function focusOnFrames(frameId) {
     // window.id.map().center([116.35815,39.82925]);
     // window.id.map().zoom(18);
@@ -622,7 +750,7 @@ function focusOnFrames(frameId) {
         var splitss = location.split(' ');
         var packageID = result['packet_name'];
         window.id.map().center([parseFloat(splitss[0]),parseFloat(splitss[1])]);
-        addPackage(packageID)
+        addPackage(packageID);
         window.id.map().zoom(18);
     });
 }

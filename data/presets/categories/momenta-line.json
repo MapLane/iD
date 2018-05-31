@@ -3,6 +3,7 @@
     "geometry": "line",
     "name": "momenta Features",
     "members": [
-        "momenta/white-dash"
+        "momenta/white-dash",
+        "momenta/broke-line"
     ]
 }
