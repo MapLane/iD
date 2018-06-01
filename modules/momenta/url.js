@@ -19,5 +19,8 @@ url.queryPackageLocation = 'http://mapeditor.momenta.works:5123/location/packet'
 url.brokeWay='http://172.21.2.197:5000/broke_way/';
 url.showStepView='http://172.21.2.197:5000/show_step_view/';
 url.approveBrokeWay='http://172.21.2.197:5000/broke_way/approve/';
+url.showBrokeLine='http://172.21.2.197:5000/broke_way/search/';
+url.gotoBrokeLine='http://172.21.2.197:5000/broke_way/goto';
+
 
 export {url};

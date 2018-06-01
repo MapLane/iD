@@ -551,6 +551,7 @@ window.showLines = function (jsonobject, zoom) {
 
 //broke line start======================= @suchu.gao
 window.showBrokeLineDebounce = _debounce(showBrokeLine,500,{'maxWait': 3000 });
+window.showBrokeLinePanelDebounce = _debounce(showBrokeLinePanel,500,{'maxWait': 3000 });
 window.startBrokeLineApprove = function(){
     window.id.map().on('move.show_broke_line',function () {
         console.log('enter move event');
@@ -559,6 +560,17 @@ window.startBrokeLineApprove = function(){
 };
 window.stopBrokeLineApprove = function(){
     window.id.map().on('move.show_broke_line',null);
+};
+window.gotoBrokeLine = function () {
+    sendPost(url.gotoBrokeLine,{},function (result) {
+        result = JSON.parse(result);
+        if (result.center){
+            var center = result.center;
+            window.id.map().center(center);
+        } else {
+            alert('没有未标记的打断线了');
+        }
+    });
 };
 function showBrokeLine(){
     //console.log('enter showBrokeLine');
@@ -581,7 +593,7 @@ function drawBrokeLine(result){
         setTimeout(function (eles) {
             return function () {
                 window.id.perform(addPackage(eles), 'addMomentaPackages');
-                showBrokeLinePanel();
+                window.showBrokeLinePanelDebounce();
             };
         }(eles),100);
     }
@@ -647,6 +659,7 @@ function onclick_brokeline_yes(){
 
     var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
     onclick_brokeline(entity.uuid,true,note);
+    d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value','');
 }
 function onclick_brokeline_no(){
     var context = window.id;
@@ -657,8 +670,10 @@ function onclick_brokeline_no(){
     if (entity.type!=='way' || entity.tags.momenta!=='broke-line'){
         alert('只允许选中一条打断线');
     }
+    context.perform(actionDeleteWay(entity.id));
     var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
     onclick_brokeline(entity.uuid,false,note);
+    d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value','');
 }
 function onclick_brokeline(way_id,result,note){
     sendPost(url.approveBrokeWay+way_id,{'result':result,'note':note},function (result) {
@@ -718,7 +733,7 @@ window.brokeWayCmd = function (way_id,zoom) {
         }
     });
 
-    showBrokeLinePanel();
+    window.showBrokeLinePanelDebounce();
 };
 
 
