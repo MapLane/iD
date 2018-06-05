@@ -363,7 +363,7 @@ function actionGetLocation(selectIds, context) {
             var ele = context.entity(item);
             if (ele.type === 'node'){
                 var loc = ele.loc;
-                alert(loc[0]+','+loc[1]);
+                alert(ele.id+':'+loc[0]+','+loc[1]);
             }
             if (ele.type === 'way'){
                 var id = ele.id;
@@ -666,6 +666,7 @@ function onclick_brokeline_yes(){
     for (var i=0; i<node_list.length; i++){
         var node = context.entity(entity.nodes[i]);
         split_way(node,entity.uuid);
+        context.perform(actionDeleteNode(node.id));
     }
     context.perform(actionDeleteWay(entity.id));
 
@@ -683,6 +684,11 @@ function onclick_brokeline_no(){
     if (entity.type!=='way' || entity.tags.momenta!=='broke-line'){
         alert('只允许选中一条打断线');
         return;
+    }
+    var node_list = entity.nodes;
+    for (var i=0; i<node_list.length; i++){
+        var node = context.entity(entity.nodes[i]);
+        context.perform(actionDeleteNode(node.id));
     }
     context.perform(actionDeleteWay(entity.id));
     var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
@@ -709,6 +715,7 @@ function split_way(node,broke_point_tag){
             var midpoint = { loc: node.loc, edge: [way.nodes[choice.index - 1], way.nodes[choice.index]] };
             context.perform(actionAddMidpoint(midpoint, newnode),
                 actionSplit(newnode.id));
+            //alert('newnode.id:'+newnode.id+',node.id'+node.id);
             return;
         }
     }
