@@ -11,7 +11,7 @@ import _debounce from 'lodash-es/debounce';
 import {
     select as d3_select
 } from 'd3-selection';
-import {geoChooseEdge} from "../geo";
+import {geoChooseEdge,geoSphericalDistance} from "../geo";
 import {t} from "../util/locale";
 
 function createEntity(ele,type){
@@ -134,6 +134,10 @@ function createLineSegment(selectIds,context) {
 }
 
 function brokeWay(selectIds,context) {
+    if (selectIds[0].substring(0,1)!=='w'){
+        alert('请选中车道线');
+        return;
+    }
     var way_id = selectIds[0].substring(1);
     return function brokeWayAction(graph) {
         window.brokeWayCmd(way_id,false);
@@ -787,6 +791,16 @@ window.showStepView = function (step,view) {
         }
     });
 };
+window.test_distaince = function(lon1,lat1,lon2,lat2){
+    var pointa = new Array();
+    pointa[0]=lon1;
+    pointa[1]=lat1;
+    var pointb = new Array();
+    pointb[0]=lon2;
+    pointb[1]=lat2;
+
+    console.log(lon1+','+lat1+'-'+lon2+','+lat2+'='+geoSphericalDistance(pointa,pointb));
+}
 //broke line end======================= @suchu.gao
 function focusOnFrames(frameId) {
     // window.id.map().center([116.35815,39.82925]);
