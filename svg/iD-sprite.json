@@ -433,6 +433,7 @@
     "operation-momenta_location":{ "viewBox": "540 380 20 20" },
     "operation-momenta_segment":{ "viewBox": "540 380 20 20" },
     "operation-momenta_broke_way":{ "viewBox": "540 380 20 20" },
+    "operation-momenta_user_broke_way":{ "viewBox": "540 380 20 20" },
     "operation-momenta_delete":{ "viewBox": "540 380 20 20" },
     "operation-momenta_show_muti_seg":{ "viewBox": "540 380 20 20" },
     "operation-join-lanegroup": { "viewBox": "580 380 20 20" },

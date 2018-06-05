@@ -141,6 +141,16 @@ function brokeWay(selectIds,context) {
     };
 }
 
+function userBrokeWay(selectIds,context) {
+    var way_id = selectIds[0].substring(1);
+    return function userBrokeWayAction(graph) {
+        var context = window.id;
+        var loc = context.map().mouseCoordinates()
+        window.userBrokeWayCmd(way_id,loc);
+        return graph;
+    };
+}
+
 function createAddMorePoints(selectIds,context) {
     var data = convert2JSON(selectIds,context);
     return function createAdd(graph) {
@@ -606,7 +616,7 @@ function filteDupBrokeLine(list){
     var resultList = new Array();
     for (var i=0; i<list.length; i++){
         var item = list[i];
-        if (item.uuid==null){
+        if (item.uuid==null || item.uuid==''){
             resultList.push(item);
         } else {
             if (!dupSet.has(item.uuid)){
@@ -644,16 +654,18 @@ function onclick_brokeline_yes(){
     var context = window.id;
     if (context.selectedIDs().length !== 1){
         alert('只允许选中一条打断线');
+        return;
     }
     var entity = context.entity(context.selectedIDs()[0]);
     if (entity.type!=='way' || entity.tags.momenta!=='broke-line'){
         alert('只允许选中一条打断线');
+        return;
     }
     //console.log('selectIDs:'+context.selectedIDs());
     var node_list = entity.nodes;
     for (var i=0; i<node_list.length; i++){
         var node = context.entity(entity.nodes[i]);
-        split_way(node);
+        split_way(node,entity.uuid);
     }
     context.perform(actionDeleteWay(entity.id));
 
@@ -665,10 +677,12 @@ function onclick_brokeline_no(){
     var context = window.id;
     if (context.selectedIDs().length !== 1){
         alert('只允许选中一条打断线');
+        return;
     }
     var entity = context.entity(context.selectedIDs()[0]);
     if (entity.type!=='way' || entity.tags.momenta!=='broke-line'){
         alert('只允许选中一条打断线');
+        return;
     }
     context.perform(actionDeleteWay(entity.id));
     var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
@@ -682,10 +696,10 @@ function onclick_brokeline(way_id,result,note){
 
     console.log(result+','+note+',way_id:'+way_id);
 }
-function split_way(node){
+function split_way(node,broke_point_tag){
     var context = window.id;
     var newnode = createEntity({},'node');
-    newnode.tags.momenta = 'broke-point';
+    newnode.tags.broke_point = broke_point_tag;
     var loc = context.projection(node.loc);
     //根据关联way找
     if (node.split_way!=null) {
@@ -735,7 +749,18 @@ window.brokeWayCmd = function (way_id,zoom) {
 
     window.showBrokeLinePanelDebounce();
 };
+window.userBrokeWayCmd = function (way_id,loc) {
+    sendPost(url.userBrokeWay+way_id+'/'+loc[0]+','+loc[1],{},function (result) {
+        var resultObj = JSON.parse(result);
+        if (resultObj && resultObj.json_lanes_show && resultObj.json_lanes_show.created.length>0) {
+            drawBrokeLine(resultObj.json_lanes_show);
+        } else {
+            alert('no broke line');
+        }
+    });
 
+    window.showBrokeLinePanelDebounce();
+};
 
 
 
@@ -771,4 +796,4 @@ function focusOnFrames(frameId) {
 }
 window.focusOnFrames = focusOnFrames;
 window.addPackages = addMomentaPackages;
-export {createLineSegment,brokeWay,actionAddStopLine,showMutiSegs,actionGetLocation,deleteLines,actionFillInfo,actionMerge,actionMomentaStraighten,createAddMorePoints,actionConvertDirection,actionConvertLineType,addMomentaPackages};
+export {createLineSegment,brokeWay,userBrokeWay,actionAddStopLine,showMutiSegs,actionGetLocation,deleteLines,actionFillInfo,actionMerge,actionMomentaStraighten,createAddMorePoints,actionConvertDirection,actionConvertLineType,addMomentaPackages};

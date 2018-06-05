@@ -101,8 +101,14 @@ en:
           reason: way_id error
           title: broke_way
           description: produce broke line
-          key: B
+          key: I
           annotation: generate broke line of selected way
+    momenta_user_broke_way:
+          reason: way_id error
+          title: user_broke_way
+          description: user produce broke line
+          key: U
+          annotation: user generate broke line of selected way
     continue:
       key: A
       title: Continue
