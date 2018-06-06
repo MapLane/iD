@@ -134,13 +134,13 @@ function createLineSegment(selectIds,context) {
 }
 
 function brokeWay(selectIds,context) {
-    if (selectIds[0].substring(0,1)!=='w'){
-        alert('请选中车道线');
-        return;
-    }
-    var way_id = selectIds[0].substring(1);
+    var way_id = selectIds[0];
     return function brokeWayAction(graph) {
-        window.brokeWayCmd(way_id,false);
+        if (way_id.substring(0,1)!=='w'){
+            alert('请选中车道线');
+            return;
+        }
+        window.brokeWayCmd(way_id.substring(1),false);
         return graph;
     };
 }
@@ -672,7 +672,7 @@ function onclick_brokeline_yes(){
         split_way(node,entity.uuid);
         context.perform(actionDeleteNode(node.id));
     }
-    context.perform(actionDeleteWay(entity.id));
+    //context.perform(actionDeleteWay(entity.id));
 
     var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
     onclick_brokeline(entity.uuid,true,note);
@@ -694,7 +694,7 @@ function onclick_brokeline_no(){
         var node = context.entity(entity.nodes[i]);
         context.perform(actionDeleteNode(node.id));
     }
-    context.perform(actionDeleteWay(entity.id));
+    //context.perform(actionDeleteWay(entity.id));
     var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
     onclick_brokeline(entity.uuid,false,note);
     d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value','');
@@ -708,17 +708,30 @@ function onclick_brokeline(way_id,result,note){
 }
 function split_way(node,broke_point_tag){
     var context = window.id;
-    var newnode = createEntity({},'node');
-    newnode.tags.broke_point = broke_point_tag;
     var loc = context.projection(node.loc);
     //根据关联way找
     if (node.split_way!=null) {
         var way = context.entity(node.split_way);
         var choice = geoChooseEdge(context.childNodes(way), loc, context.projection);
         if (choice.distance<1){
-            var midpoint = { loc: node.loc, edge: [way.nodes[choice.index - 1], way.nodes[choice.index]] };
-            context.perform(actionAddMidpoint(midpoint, newnode),
-                actionSplit(newnode.id));
+            var newnode = null;
+            var startNode = context.entity(way.nodes[choice.index - 1]);
+            var endNode = context.entity(way.nodes[choice.index]);
+            var startMerge = compute_distance(node,startNode)<0.2;
+            var endMerge = compute_distance(node,endNode)<0.2;
+            if (startMerge){
+                newnode = startNode;
+                newnode.tags.broke_point = broke_point_tag;
+            } else if (endMerge){
+                newnode = endNode;
+                newnode.tags.broke_point = broke_point_tag;
+            } else {
+                newnode = createEntity({},'node');
+                newnode.tags.broke_point = broke_point_tag;
+                var midpoint = { loc: node.loc, edge: [way.nodes[choice.index - 1], way.nodes[choice.index]] };
+                context.perform(actionAddMidpoint(midpoint, newnode));
+            }
+            context.perform(actionSplit(newnode.id));
             //alert('newnode.id:'+newnode.id+',node.id'+node.id);
             return;
         }
@@ -738,11 +751,29 @@ function split_way(node,broke_point_tag){
         }
     }
     if (minchoice!=null && minchoice.distance<1){
-        midpoint = { loc: node.loc, edge: [way.nodes[minchoice.index - 1], way.nodes[minchoice.index]] };
-        context.perform(actionAddMidpoint(midpoint, newnode),
-            actionSplit(newnode.id));
+        newnode = null;
+        startNode = context.entity(way.nodes[minchoice.index - 1]);
+        endNode = context.entity(way.nodes[minchoice.index]);
+        startMerge = compute_distance(node,startNode)<0.2;
+        endMerge = compute_distance(node,endNode)<0.2;
+        if (startMerge){
+            newnode = startNode;
+            newnode.tags.broke_point = broke_point_tag;
+        } else if (endMerge){
+            newnode = endNode;
+            newnode.tags.broke_point = broke_point_tag;
+        } else {
+            newnode = createEntity({}, 'node');
+            newnode.tags.broke_point = broke_point_tag;
+            midpoint = {loc: node.loc, edge: [way.nodes[minchoice.index - 1], way.nodes[minchoice.index]]};
+            context.perform(actionAddMidpoint(midpoint, newnode));
+        }
+        context.perform(actionSplit(newnode.id));
         return;
     }
+}
+function compute_distance(node1,node2){
+    return geoSphericalDistance(node1.loc,node2.loc);
 }
 window.brokeWayCmd = function (way_id,zoom) {
     if (undefined === zoom) {zoom = true;}
