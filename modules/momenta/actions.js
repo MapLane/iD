@@ -11,6 +11,10 @@ import _debounce from 'lodash-es/debounce';
 import {
     select as d3_select
 } from 'd3-selection';
+import {
+    modeBrowse,
+    modeSelect
+} from '../modes';
 import {geoChooseEdge,geoSphericalDistance} from "../geo";
 import {t} from "../util/locale";
 
@@ -667,10 +671,15 @@ function onclick_brokeline_yes(){
     }
     //console.log('selectIDs:'+context.selectedIDs());
     var node_list = entity.nodes;
+    var delete_node_list = new Array();
     for (var i=0; i<node_list.length; i++){
         var node = context.entity(entity.nodes[i]);
         split_way(node,entity.uuid);
-        context.perform(actionDeleteNode(node.id));
+        delete_node_list[i]=node;
+        //context.perform(actionDeleteNode(node.id));
+    }
+    for (var x in delete_node_list){
+        context.perform(actionDeleteNode(delete_node_list[x].id));
     }
     //context.perform(actionDeleteWay(entity.id));
 
@@ -822,7 +831,7 @@ window.showStepView = function (step,view) {
         }
     });
 };
-window.test_distaince = function(lon1,lat1,lon2,lat2){
+window.test_distance = function(lon1,lat1,lon2,lat2){
     var pointa = new Array();
     pointa[0]=lon1;
     pointa[1]=lat1;
@@ -831,6 +840,9 @@ window.test_distaince = function(lon1,lat1,lon2,lat2){
     pointb[1]=lat2;
 
     console.log(lon1+','+lat1+'-'+lon2+','+lat2+'='+geoSphericalDistance(pointa,pointb));
+};
+window.test = function (id) {
+    modeSelect(window.id,[id]);
 }
 //broke line end======================= @suchu.gao
 function focusOnFrames(frameId) {
