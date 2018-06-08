@@ -722,6 +722,13 @@ function onclick_brokeline(way_id,result,note){
 
     console.log(result+','+note+',way_id:'+way_id);
 }
+function mergeBrokePoint(newnode, broke_point_tag) {
+    if (newnode.tags.broke_point!=null && newnode.tags.broke_point !== ''){
+        newnode.tags.broke_point = newnode.tags.broke_point+ ';' +broke_point_tag;
+    } else {
+        newnode.tags.broke_point = broke_point_tag;
+    }
+}
 function split_way(node,broke_point_tag){
     var context = window.id;
     var loc = context.projection(node.loc);
@@ -737,13 +744,16 @@ function split_way(node,broke_point_tag){
             var endMerge = compute_distance(node,endNode)<0.2;
             if (startMerge){
                 newnode = startNode;
-                newnode.tags.broke_point = broke_point_tag;
+                mergeBrokePoint(newnode, broke_point_tag);
+                newnode.tags.ele = node.ele;
             } else if (endMerge){
                 newnode = endNode;
-                newnode.tags.broke_point = broke_point_tag;
+                mergeBrokePoint(newnode, broke_point_tag);
+                newnode.tags.ele = node.ele;
             } else {
                 newnode = createEntity({},'node');
-                newnode.tags.broke_point = broke_point_tag;
+                mergeBrokePoint(newnode, broke_point_tag);
+                newnode.tags.ele = node.ele;
                 var midpoint = { loc: node.loc, edge: [way.nodes[choice.index - 1], way.nodes[choice.index]] };
                 context.perform(actionAddMidpoint(midpoint, newnode));
             }
@@ -774,13 +784,16 @@ function split_way(node,broke_point_tag){
         endMerge = compute_distance(node,endNode)<0.2;
         if (startMerge){
             newnode = startNode;
-            newnode.tags.broke_point = broke_point_tag;
+            mergeBrokePoint(newnode, broke_point_tag);
+            newnode.tags.ele = node.ele;
         } else if (endMerge){
             newnode = endNode;
-            newnode.tags.broke_point = broke_point_tag;
+            mergeBrokePoint(newnode, broke_point_tag);
+            newnode.tags.ele = node.ele;
         } else {
             newnode = createEntity({}, 'node');
-            newnode.tags.broke_point = broke_point_tag;
+            mergeBrokePoint(newnode, broke_point_tag);
+            newnode.tags.ele = node.ele;
             midpoint = {loc: node.loc, edge: [way.nodes[minchoice.index - 1], way.nodes[minchoice.index]]};
             context.perform(actionAddMidpoint(midpoint, newnode));
         }
