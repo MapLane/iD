@@ -675,11 +675,13 @@ function onclick_brokeline_yes(){
     for (var i=0; i<node_list.length; i++){
         var node = context.entity(entity.nodes[i]);
         split_way(node,entity.uuid);
-        delete_node_list[i]=node;
+        delete_node_list[i]=entity.nodes[i];
         //context.perform(actionDeleteNode(node.id));
     }
     for (var x in delete_node_list){
-        context.perform(actionDeleteNode(delete_node_list[x].id));
+        if (context.hasEntity(delete_node_list[x])) {
+            context.perform(actionDeleteNode(delete_node_list[x]));
+        }
     }
     //context.perform(actionDeleteWay(entity.id));
 
@@ -699,9 +701,14 @@ function onclick_brokeline_no(){
         return;
     }
     var node_list = entity.nodes;
+    var delete_node_list = new Array();
     for (var i=0; i<node_list.length; i++){
-        var node = context.entity(entity.nodes[i]);
-        context.perform(actionDeleteNode(node.id));
+        delete_node_list[i]=entity.nodes[i];
+    }
+    for (var x in delete_node_list){
+        if (context.hasEntity(delete_node_list[x])) {
+            context.perform(actionDeleteNode(delete_node_list[x]));
+        }
     }
     //context.perform(actionDeleteWay(entity.id));
     var note = d3_select('#content').select('#bar').select('.limiter').select('.broke-line-comment').property('value');
